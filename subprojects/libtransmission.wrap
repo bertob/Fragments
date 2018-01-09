@@ -1,0 +1,5 @@
+[wrap-git]
+directory=libtransmission
+url=https://github.com/FragmentsApp/libtransmission
+revision=head
+

@@ -1,0 +1,5 @@
+[wrap-git]
+directory=dht
+url=https://github.com/FragmentsApp/dht
+revision=head
+

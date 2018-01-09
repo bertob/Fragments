@@ -43,15 +43,6 @@
                 }]
         },
         {
-                "name":"libtransmission",
-                "buildsystem": "meson",
-                "sources":[
-                {
-                        "type":"git",
-                        "url":"https://github.com/FragmentsApp/libtransmission"
-                }]
-        },
-        {
                 "name": "fragments",
                 "buildsystem": "meson",
                 "builddir": true,

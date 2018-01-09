@@ -1,0 +1,4 @@
+[wrap-git]
+directory=miniupnpc
+url=https://github.com/FragmentsApp/miniupnpc
+revision=head

@@ -1,0 +1,5 @@
+[wrap-git]
+directory=libb64
+url=https://github.com/FragmentsApp/libb64
+revision=head
+
