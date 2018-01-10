@@ -43,8 +43,28 @@
                 }]
         },
         {
+                "name":"libb64",
+                "buildsystem":"cmake",
+                "sources":[
+                {
+                        "type":"git",
+                        "branch":"post-1.2.1-transmission",
+                        "url":"https://github.com/transmission/libb64"
+                }]
+        },
+        {
+                "name":"libnatpmp",
+                "buildsystem":"cmake",
+                "sources":[
+                {
+                        "type":"git",
+                        "branch":"post-20151025-transmission",
+                        "url":"https://github.com/transmission/libnatpmp"
+                }]
+        },
+        {
                 "name": "fragments",
-                "buildsystem": "meson",
+                "buildsystem":"meson",
                 "builddir": true,
                 "sources": [
                 {

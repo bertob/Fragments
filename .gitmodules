@@ -1,0 +1,3 @@
+[submodule "external/libtransmission"]
+	path = external/libtransmission
+	url = https://github.com/FragmentsApp/libtransmission

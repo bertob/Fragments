@@ -4,14 +4,15 @@ vala_sources = [
   'fragments-window.vala'
 ]
 
+vapi_dir = join_paths (meson.current_source_dir (), 'vapis')
+
 deps = [
-#  dazzle_dep,
   gtk_dep,
-  transmission_dep
+  transmission_dep,
+  valac.find_library('transmission', dirs: vapi_dir)
 ]
 
 vala_args = [
-        '--vapidir=' + meson.current_source_dir() + '/vapis',
 	'--target-glib=2.38']
 
 executable(

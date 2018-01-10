@@ -1,4 +1,4 @@
-[CCode (cheader_filename = "transmission/transmission.h", lower_case_cprefix = "tr_", cprefix = "TR_")]
+[CCode (cheader_filename = "transmission.h", lower_case_cprefix = "tr_", cprefix = "TR_")]
 namespace Transmission {
 
 	[CCode (cname = "TR_SHA_DIGEST_LENGTH")]
