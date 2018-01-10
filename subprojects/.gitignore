@@ -1,6 +1,6 @@
--# Ignore everything
--*
--
--# But not wrap files...
--!.gitignore
--!*.wrap
+# Ignore everything
+*
+
+# But not wrap files...
+!.gitignore
+!*.wrap
