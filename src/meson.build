@@ -12,6 +12,9 @@ deps = [
   valac.find_library('transmission', dirs: vapi_dir)
 ]
 
+c_args = [
+	'-pthread']
+
 vala_args = [
 	'--target-glib=2.38']
 
@@ -20,6 +23,7 @@ executable(
   vala_sources + resources,
   dependencies: deps,
   vala_args: vala_args,
+  c_args: c_args,
   install: true
 )
 

@@ -15,11 +15,6 @@
     "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
   ],
   "build-options": {
-    "cflags": "-O2 -g",
-    "cxxflags": "-O2 -g",
-    "env": {
-      "V": "1"
-    }
   },
   "cleanup": [
     "/include",
@@ -43,23 +38,12 @@
                 }]
         },
         {
-                "name":"libb64",
-                "buildsystem":"cmake",
-                "sources":[
-                {
-                        "type":"git",
-                        "branch":"post-1.2.1-transmission",
-                        "url":"https://github.com/transmission/libb64"
-                }]
-        },
-        {
                 "name":"libnatpmp",
-                "buildsystem":"cmake",
+                "buildsystem":"meson",
                 "sources":[
                 {
                         "type":"git",
-                        "branch":"post-20151025-transmission",
-                        "url":"https://github.com/transmission/libnatpmp"
+                        "url":"https://github.com/FragmentsApp/libnatpmp"
                 }]
         },
         {
