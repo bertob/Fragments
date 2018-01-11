@@ -1,0 +1,5 @@
+[wrap-git]
+directory=libnatpmp
+url=https://github.com/FragmentsApp/libnatpmp
+revision=head
+
