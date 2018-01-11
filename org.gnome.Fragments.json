@@ -38,15 +38,6 @@
                 }]
         },
         {
-                "name":"libnatpmp",
-                "buildsystem":"meson",
-                "sources":[
-                {
-                        "type":"git",
-                        "url":"https://github.com/FragmentsApp/libnatpmp"
-                }]
-        },
-        {
                 "name": "fragments",
                 "buildsystem":"meson",
                 "builddir": true,

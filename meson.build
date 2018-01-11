@@ -17,6 +17,7 @@ gtk_dep = dependency('gtk+-3.0', version : '>=3.20.10')
 # libtransmission deps
 dht_dep = dependency('dht', fallback : ['dht', 'dht_dep'])
 utp_dep = dependency('libutp', fallback : ['libutp', 'utp_dep'])
+natpmp_dep = dependency('libnatpmp', fallback : ['libnatpmp', 'natpmp_dep'])
 miniupnpc_dep = dependency('miniupnpc', fallback : ['miniupnpc', 'miniupnpc_dep'])
 
 gnome = import('gnome')
