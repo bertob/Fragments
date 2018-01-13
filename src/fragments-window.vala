@@ -8,9 +8,10 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 	        this.manager = manager;
                 this.show_all();
 
-                manager.new_torrent_box.connect((torrent) => {
-                        torrent_listbox.add(torrent);
-                });
+                var torrents = manager.get_torrents_as_box();
+                foreach(TorrentBox tbox in torrents){
+                        torrent_listbox.add(tbox);
+                }
 	}
 
 	[GtkCallback]
@@ -32,7 +33,9 @@ public class Fragments.Window : Gtk.ApplicationWindow {
                 filech.add_filter (all_files_filter);
 
                 if (filech.run () == Gtk.ResponseType.ACCEPT) {
-                        manager.add_torrent_by_path(filech.get_filename ());
+                        TorrentBox torrent_box;
+                        manager.add_torrent_by_path(filech.get_filename(), out torrent_box);
+                        if(torrent_box != null) torrent_listbox.add(torrent_box);
                 }
 
                 filech.close ();

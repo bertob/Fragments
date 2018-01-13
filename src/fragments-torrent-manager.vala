@@ -7,7 +7,6 @@ public class Fragments.TorrentManager{
         private Transmission.variant_dict settings;
 
         private List<unowned Transmission.Torrent> torrent_list;
-        public signal void new_torrent_box(TorrentBox torrent);
 
         private static string CONFIG_DIR = GLib.Path.build_path(GLib.Path.DIR_SEPARATOR_S, Environment.get_user_config_dir(), "fragments");
 
@@ -23,13 +22,29 @@ public class Fragments.TorrentManager{
 
                 session = new Session(CONFIG_DIR, false, settings);
                 constructor = new TorrentConstructor(session);
+
+                // Restore old torrents
+                unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (constructor);
+                for (int i = 0; i < transmission_torrents.length; i++) {
+                        torrent_list.append(transmission_torrents[i]);
+                }
         }
 
         ~TorrentManager(){
                 session.save_settings(CONFIG_DIR, settings);
         }
 
-        public Transmission.ParseResult add_torrent_by_path(string path){
+        public List<TorrentBox> get_torrents_as_box(){
+                List<TorrentBox> result = new List<TorrentBox>();
+
+                foreach(unowned Transmission.Torrent torrent in torrent_list){
+                        result.append(new TorrentBox(torrent));
+                }
+
+                return result;
+        }
+
+        public Transmission.ParseResult add_torrent_by_path(string path, out TorrentBox torrent_box){
                 constructor = new TorrentConstructor(session);
                 constructor.set_metainfo_from_file(path);
                 constructor.set_download_dir(ConstructionMode.FORCE, Environment.get_user_special_dir(GLib.UserDirectory.DOWNLOAD));
@@ -41,7 +56,7 @@ public class Fragments.TorrentManager{
 
                 if(result == ParseResult.OK){
                         torrent_list.append(torrent);
-                        new_torrent_box(new Fragments.TorrentBox(torrent));
+                        torrent_box = new TorrentBox(torrent);
                 }
 
                 return result;

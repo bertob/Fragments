@@ -19,7 +19,7 @@
               <object class="GtkListBox" id="torrent_listbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">center</property>
+                <property name="selection_mode">none</property>
               </object>
             </child>
           </object>
@@ -31,8 +31,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="title">Fragments</property>
-        <property name="subtitle">3 Torrents</property>
-        <property name="has_subtitle">False</property>
         <property name="show_close_button">True</property>
         <child>
           <object class="GtkButton" id="open_torrent_button">
