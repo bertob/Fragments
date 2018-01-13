@@ -1,23 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.2 -->
 <interface>
+  <requires lib="gtk+" version="3.10"/>
   <template class="FragmentsWindow" parent="GtkApplicationWindow">
-    <property name="default-width">600</property>
-    <property name="default-height">300</property>
-    <child type="titlebar">
-      <object class="GtkHeaderBar" id="header_bar">
-        <property name="visible">true</property>
-        <property name="show-close-button">true</property>
-        <property name="title">Hello, World!</property>
+    <property name="can_focus">False</property>
+    <property name="default_width">600</property>
+    <property name="default_height">300</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <child>
+          <object class="GtkViewport">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkListBox" id="torrent_listbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
-    <child>
-      <object class="GtkLabel" id="label">
-        <property name="label">Hello, World!</property>
-        <property name="visible">true</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-          <attribute name="scale" value="2"/>
-        </attributes>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header_bar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="title">Fragments</property>
+        <property name="subtitle">3 Torrents</property>
+        <property name="has_subtitle">False</property>
+        <property name="show_close_button">True</property>
+        <child>
+          <object class="GtkButton" id="open_torrent_button">
+            <property name="label" translatable="yes">Open</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="open_torrent_button_clicked" swapped="no"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="menu_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">open-menu-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
       </object>
     </child>
   </template>

@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/org/gnome/Fragments">
     <file>ui/window.ui</file>
+    <file>ui/torrent-box.ui</file>
   </gresource>
 </gresources>
