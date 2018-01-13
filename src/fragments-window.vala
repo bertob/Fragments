@@ -1,3 +1,5 @@
+using Gtk;
+
 [GtkTemplate (ui = "/org/gnome/Fragments/ui/window.ui")]
 public class Fragments.Window : Gtk.ApplicationWindow {
 
@@ -7,6 +9,10 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 	public Window (TorrentManager manager) {
 	        this.manager = manager;
                 this.show_all();
+
+                var provider = new CssProvider ();
+                provider.load_from_resource ("/org/gnome/Fragments/org.gnome.Fragments.css");
+                StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 
                 var torrents = manager.get_torrents_as_box();
                 foreach(TorrentBox tbox in torrents){
