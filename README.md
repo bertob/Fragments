@@ -1,3 +1,9 @@
+# Fragments
+### A GTK3 BitTorrent Client
+
+## Mockup
+![mockup](https://i.imgur.com/sJ5Bqsz.jpg)
+
 ## Nightly repository (Flatpak)
 The latest development version is signed with a GPG key, and will be updated every night. Make sure you have Flatpak installed. [Get more information](http://flatpak.org/getting.html)
 ### Graphical:
