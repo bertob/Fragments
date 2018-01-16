@@ -31,16 +31,6 @@
   ],
         "modules": [
         {
-                "name":"libdazzle",
-                "buildsystem":"meson",
-                "sources":[
-                {
-                        "type":"git",
-                        "branch":"libdazzle-3-26",
-                        "url":"https://github.com/chergert/libdazzle"
-                }]
-        },
-        {
                 "name":"libevent",
                 "sources":[
                 {
