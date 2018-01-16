@@ -5,6 +5,8 @@
   "sdk": "org.gnome.Sdk",
   "command": "fragments",
   "finish-args": [
+    "--filesystem=host",
+    "--device=dri",
     "--share=network",
     "--share=ipc",
     "--socket=x11",
