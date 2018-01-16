@@ -81,15 +81,40 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
                 downloaded_label.set_text(format_size(torrent.stat_cached.haveValid));
                 uploaded_label.set_text(format_size(torrent.stat_cached.uploadedEver));
 
+                // Set standards
+                start_image.set_visible(false);
+                pause_image.set_visible(true);
+
                 // Status text
                 switch(torrent.stat_cached.activity){
-                        case Activity.SEED: status_label.set_text("Seeding..."); break;
-                        case Activity.CHECK: status_label.set_text("Checking files..."); break;
-                        case Activity.STOPPED: status_label.set_text("Torrent is stopped."); break;
-                        case Activity.DOWNLOAD: status_label.set_text("Downloading..."); break;
-                        case Activity.SEED_WAIT: status_label.set_text("Queued to seed."); break;
-                        case Activity.CHECK_WAIT: status_label.set_text("Queued to check files."); break;
-                        case Activity.DOWNLOAD_WAIT: status_label.set_text("Queued to download."); break;
+                        case Activity.SEED: {
+                                status_label.set_text("%s uploaded · %s".printf(
+                                        format_size(torrent.stat_cached.uploadedEver),
+                                        upload_speed));
+                                break;}
+                        case Activity.CHECK: {
+                                status_label.set_text("Checking files...");
+                                break;}
+                        case Activity.STOPPED: {
+                                status_label.set_text("Stopped");
+                                start_image.set_visible(true);
+                                pause_image.set_visible(false);
+                                break;}
+                        case Activity.DOWNLOAD: {
+                                status_label.set_text("%s of %s downloaded · %s".printf(
+                                        format_size(torrent.stat_cached.haveValid),
+                                        format_size(torrent.stat_cached.sizeWhenDone),
+                                        download_speed));
+                                break;}
+                        case Activity.SEED_WAIT: {
+                                status_label.set_text("Queued to seed");
+                                break;}
+                        case Activity.CHECK_WAIT: {
+                                status_label.set_text("Queued to check files");
+                                break;}
+                        case Activity.DOWNLOAD_WAIT: {
+                                status_label.set_text("Queued to download");
+                                break;}
                 }
 
                 return false;
@@ -102,7 +127,10 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
 
         [GtkCallback]
         private void pause_button_clicked(){
+                if(torrent.stat_cached == null) return;
 
+                if(torrent.stat_cached.activity == Activity.STOPPED) torrent.start();
+                else torrent.stop();
         }
 
 
