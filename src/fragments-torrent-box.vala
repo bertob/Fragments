@@ -1,10 +1,7 @@
 using Gtk;
-using Transmission;
 
 [GtkTemplate (ui = "/org/gnome/Fragments/ui/torrent-box.ui")]
 public class Fragments.TorrentBox : Gtk.ListBoxRow{
-
-        private unowned Torrent torrent;
 
         [GtkChild] private Label title_label;
         [GtkChild] private Label status_label;
@@ -29,9 +26,7 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
         private const int search_delay = 1;
         private uint delayed_changed_id;
 
-        public TorrentBox(Torrent torrent){
-                this.torrent = torrent;
-
+        public TorrentBox(){
                 torrent_eventbox.button_press_event.connect(toggle_revealer);
 
                 this.show_all();
@@ -47,75 +42,75 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
         }
 
         private bool update(){
-                title_label.set_text(torrent.name);
+                // title_label.set_text(torrent.name);
 
-                reset_timeout();
-                if(torrent.stat_cached == null) return false;
+                // reset_timeout();
+                // if(torrent.stat_cached == null) return false;
 
                 // Progress
-                progress_bar.set_fraction(torrent.stat_cached.percentDone);
+                // progress_bar.set_fraction(torrent.stat_cached.percentDone);
 
                 // ETA
-                if(torrent.stat_cached.eta != uint.MAX)
-                        eta_label.set_text("%s left".printf(Utils.time_to_string(torrent.stat_cached.eta)));
-                else
-                        eta_label.set_text(" ");
+                // if(torrent.stat_cached.eta != uint.MAX)
+                //         eta_label.set_text("%s left".printf(Utils.time_to_string(torrent.stat_cached.eta)));
+                // else
+                //         eta_label.set_text(" ");
 
                 // Download / Upload Speed
-                char[40] buf = new char[40];
-                var download_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceDownloadSpeed_KBps);
-                var upload_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceUploadSpeed_KBps);
+                // char[40] buf = new char[40];
+                // var download_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceDownloadSpeed_KBps);
+                // var upload_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceUploadSpeed_KBps);
 
-                download_speed_label.set_text(download_speed);
-                upload_speed_label.set_text(upload_speed);
+                // download_speed_label.set_text(download_speed);
+                // upload_speed_label.set_text(upload_speed);
 
                 // Seeders / Leechers information
-                seeders_label.set_text("%i (%i active)".printf(
-                        torrent.stat_cached.peersConnected,
-                        torrent.stat_cached.peersSendingToUs));
+                // seeders_label.set_text("%i (%i active)".printf(
+                //         torrent.stat_cached.peersConnected,
+                //         torrent.stat_cached.peersSendingToUs));
 
-                leechers_label.set_text("%i".printf(
-                        torrent.stat_cached.peersGettingFromUs));
+                // leechers_label.set_text("%i".printf(
+                //         torrent.stat_cached.peersGettingFromUs));
 
                 // Downloaded / Uploaded information
-                downloaded_label.set_text(format_size(torrent.stat_cached.haveValid));
-                uploaded_label.set_text(format_size(torrent.stat_cached.uploadedEver));
+                // downloaded_label.set_text(format_size(torrent.stat_cached.haveValid));
+                // uploaded_label.set_text(format_size(torrent.stat_cached.uploadedEver));
 
                 // Set standards
-                start_image.set_visible(false);
-                pause_image.set_visible(true);
+                // start_image.set_visible(false);
+                // pause_image.set_visible(true);
 
                 // Status text
-                switch(torrent.stat_cached.activity){
-                        case Activity.SEED: {
-                                status_label.set_text("%s uploaded · %s".printf(
-                                        format_size(torrent.stat_cached.uploadedEver),
-                                        upload_speed));
-                                break;}
-                        case Activity.CHECK: {
-                                status_label.set_text("Checking files...");
-                                break;}
-                        case Activity.STOPPED: {
-                                status_label.set_text("Stopped");
-                                start_image.set_visible(true);
-                                pause_image.set_visible(false);
-                                break;}
-                        case Activity.DOWNLOAD: {
-                                status_label.set_text("%s of %s downloaded · %s".printf(
-                                        format_size(torrent.stat_cached.haveValid),
-                                        format_size(torrent.stat_cached.sizeWhenDone),
-                                        download_speed));
-                                break;}
-                        case Activity.SEED_WAIT: {
-                                status_label.set_text("Queued to seed");
-                                break;}
-                        case Activity.CHECK_WAIT: {
-                                status_label.set_text("Queued to check files");
-                                break;}
-                        case Activity.DOWNLOAD_WAIT: {
-                                status_label.set_text("Queued to download");
-                                break;}
-                }
+                // switch(torrent.stat_cached.activity){
+                //         case Activity.SEED: {
+                //                 status_label.set_text("%s uploaded · %s".printf(
+                //                         format_size(torrent.stat_cached.uploadedEver),
+                //                         upload_speed));
+                //                 break;}
+                //         case Activity.CHECK: {
+                //                 status_label.set_text("Checking files...");
+                //                 break;}
+                //         case Activity.STOPPED: {
+                //                 status_label.set_text("Stopped");
+                //                 start_image.set_visible(true);
+                //                 pause_image.set_visible(false);
+                //                 break;}
+                //         case Activity.DOWNLOAD: {
+                //                 status_label.set_text("%s of %s downloaded · %s".printf(
+                //                         format_size(torrent.stat_cached.haveValid),
+                //                         format_size(torrent.stat_cached.sizeWhenDone),
+                //                         download_speed));
+                //                 break;}
+                //         case Activity.SEED_WAIT: {
+                //                 status_label.set_text("Queued to seed");
+                //                 break;}
+                //         case Activity.CHECK_WAIT: {
+                //                 status_label.set_text("Queued to check files");
+                //                 break;}
+                //         case Activity.DOWNLOAD_WAIT: {
+                //                 status_label.set_text("Queued to download");
+                //                 break;}
+                // }
 
                 return false;
         }
@@ -127,10 +122,7 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
 
         [GtkCallback]
         private void pause_button_clicked(){
-                if(torrent.stat_cached == null) return;
 
-                if(torrent.stat_cached.activity == Activity.STOPPED) torrent.start();
-                else torrent.stop();
         }
 
 

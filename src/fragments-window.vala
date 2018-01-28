@@ -13,11 +13,6 @@ public class Fragments.Window : Gtk.ApplicationWindow {
                 var provider = new CssProvider ();
                 provider.load_from_resource ("/org/gnome/Fragments/org.gnome.Fragments.css");
                 StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
-
-                var torrents = manager.get_torrents_as_box();
-                foreach(TorrentBox tbox in torrents){
-                        torrent_listbox.add(tbox);
-                }
 	}
 
 	[GtkCallback]
@@ -39,9 +34,9 @@ public class Fragments.Window : Gtk.ApplicationWindow {
                 filech.add_filter (all_files_filter);
 
                 if (filech.run () == Gtk.ResponseType.ACCEPT) {
-                        TorrentBox torrent_box;
-                        manager.add_torrent_by_path(filech.get_filename(), out torrent_box);
-                        if(torrent_box != null) torrent_listbox.add(torrent_box);
+                        TorrentBox torrent_box = new TorrentBox();
+                        //manager.add_torrent_by_path(filech.get_filename(), out torrent_box);
+                        torrent_listbox.add(torrent_box);
                 }
 
                 filech.close ();

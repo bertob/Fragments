@@ -11,8 +11,6 @@ vapi_dir = join_paths (meson.current_source_dir (), 'vapis')
 deps = [
   gtk_dep,
 #  dazzle_dep,
-  transmission_dep,
-  valac.find_library('transmission', dirs: vapi_dir),
   valac.find_library('config', dirs: vapi_dir),
 ]
 

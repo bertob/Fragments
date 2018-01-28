@@ -33,14 +33,6 @@
   ],
         "modules": [
         {
-                "name":"libevent",
-                "sources":[
-                {
-                        "type":"git",
-                        "url":"https://github.com/libevent/libevent"
-                }]
-        },
-        {
                 "name": "fragments",
                 "buildsystem":"meson",
                 "builddir": true,
