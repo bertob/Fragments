@@ -1,14 +1,8 @@
 # Fragments
-### A GTK3 BitTorrent Client
-
-## Mockup
 ![mockup](https://i.imgur.com/sJ5Bqsz.jpg)
+Fragments is a GTK3 BitTorrent Client, which is still under heavy development. However you can try out the latest nightly build.
+ Make sure you have Flatpak installed. [Get more information](http://flatpak.org/getting.html)
 
-## Nightly repository (Flatpak)
-The latest development version is signed with a GPG key, and will be updated every night. Make sure you have Flatpak installed. [Get more information](http://flatpak.org/getting.html)
-### Graphical:
-* [Click here to install Fragments](https://repos.byteturtle.eu/fragments-master.flatpakref)
-### Terminal: 
 * ``flatpak install --from https://repos.byteturtle.eu/fragments-master.flatpakref``
 
 **GPG Details:**
