@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/Fragments">
+  <gresource prefix="/org/gnome/Fragments/">
     <file>ui/window.ui</file>
     <file>ui/torrent-box.ui</file>
-    <file>org.gnome.Fragments.css</file>
+    <file>interface/adwaita.css</file>
+    <file>icons/lightning-symbolic.svg</file>
+    <file>icons/speed-limit-off-symbolic.svg</file>
+    <file>icons/speed-limit-on-symbolic.svg</file>
   </gresource>
 </gresources>

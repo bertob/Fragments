@@ -5,33 +5,45 @@
   "sdk": "org.gnome.Sdk",
   "command": "fragments",
   "finish-args": [
-    "--filesystem=host",
-    "--device=dri",
-    "--share=network",
-    "--share=ipc",
-    "--socket=x11",
-    "--socket=wayland",
-    "--filesystem=xdg-run/dconf",
-    "--filesystem=~/.config/dconf:ro",
-    "--talk-name=ca.desrt.dconf",
-    "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+	"--filesystem=host",
+	"--device=dri",
+	"--share=network",
+	"--share=ipc",
+	"--socket=x11",
+	"--socket=wayland",
+	"--filesystem=xdg-run/dconf",
+	"--filesystem=~/.config/dconf:ro",
+	"--talk-name=ca.desrt.dconf",
+	"--env=DCONF_USER_CONFIG_DIR=.config/dconf"
   ],
   "build-options": {
         "build-args": ["--share=network"]
   },
   "cleanup": [
-    "/include",
-    "/lib/pkgconfig",
-    "/man",
-    "/share/doc",
-    "/share/gtk-doc",
-    "/share/man",
-    "/share/pkgconfig",
-    "/share/vala",
-    "*.la",
-    "*.a"
+	"/include",
+	"/lib/pkgconfig",
+	"/man",
+	"/share/doc",
+	"/share/gtk-doc",
+	"/share/man",
+	"/share/pkgconfig",
+	"/share/vala",
+	"*.la",
+	"*.a"
   ],
         "modules": [
+        {
+		"name": "libdazzle",
+		"config-opts": [ "--buildtype=release" ],
+		"buildsystem": "meson",
+		"builddir": true,
+		"sources": [
+		{
+			"type": "git",
+			"url": "https://gitlab.gnome.org/GNOME/libdazzle.git",
+			"branch": "libdazzle-3-26"
+                }]
+	},
         {
                 "name": "fragments",
                 "buildsystem":"meson",

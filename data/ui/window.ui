@@ -8,6 +8,7 @@
     <property name="can_focus">False</property>
     <property name="default_width">600</property>
     <property name="default_height">300</property>
+    <property name="icon_name">org.gnome.Fragments</property>
     <child>
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
@@ -39,14 +40,17 @@
         <property name="show_close_button">True</property>
         <child>
           <object class="GtkButton" id="open_torrent_button">
-            <property name="label" translatable="yes">Open</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <signal name="clicked" handler="open_torrent_button_clicked" swapped="no"/>
-            <style>
-              <class name="suggested-action"/>
-            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">list-add-symbolic</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -65,6 +69,24 @@
           <packing>
             <property name="pack_type">end</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="speed_limit_button">
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="no_show_all">True</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="resource">/org/gnome/Fragments/icons/speed-limit-off-symbolic.svg</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

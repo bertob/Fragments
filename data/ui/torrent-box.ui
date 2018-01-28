@@ -118,7 +118,7 @@
                               <object class="GtkImage" id="turboboost_image">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
-                                <property name="icon_name">thunderbolt-symbolic</property>
+                                <property name="icon_name">lightning-symbolic</property>
                                 <property name="icon_size">1</property>
                               </object>
                               <packing>

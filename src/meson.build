@@ -6,20 +6,21 @@ vala_sources = [
   'fragments-window.vala'
 ]
 
-vapi_dir = join_paths (meson.current_source_dir (), 'vapis')
-
 deps = [
   gtk_dep,
-#  dazzle_dep,
+  dazzle_dep,
   valac.find_library('config', dirs: vapi_dir),
 ]
 
 c_args = [
   '-DVERSION="' + meson.project_version() + '"',
   '-DGETTEXT_PACKAGE="gradio"',
-  '-DGNOMELOCALEDIR="' + get_option('prefix') + '/' + get_option('localedir') + '"' ]
+  '-DGNOMELOCALEDIR="' + get_option('prefix') + '/' + get_option('localedir') + '"'
+]
 
-vala_args = [ '--target-glib=2.38']
+vala_args = [
+  '--target-glib=2.38'
+]
 
 executable(
   meson.project_name(),
