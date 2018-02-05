@@ -24,6 +24,9 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
         [GtkChild] private Revealer revealer;
         [GtkChild] private EventBox torrent_eventbox;
 
+        [GtkChild] private Button more_peers_button;
+        [GtkChild] private Button open_button;
+
         public TorrentBox(Torrent torrent){
         	this.torrent = torrent;
 
@@ -87,11 +90,14 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
 
         [GtkCallback]
         private void more_peers_button_clicked(){
-
+		if(torrent.can_manual_update)
+			torrent.manual_update();
+		else
+			more_peers_button.set_sensitive(false);
         }
 
         [GtkCallback]
-        private void open_in_folder_button_clicked(){
+        private void open_button_clicked(){
 
         }
 

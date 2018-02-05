@@ -546,12 +546,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="open_in_folder_button">
+                          <object class="GtkButton" id="open_button">
                             <property name="label" translatable="yes">Open in folder</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="clicked" handler="open_in_folder_button_clicked" swapped="no"/>
+                            <signal name="clicked" handler="open_button_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>

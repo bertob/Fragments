@@ -25,13 +25,13 @@ public class Fragments.Torrent : Object{
 	public int leechers { get; set; }
 
 	public string status_text { get; set; }
+	public bool can_manual_update { get{return torrent.can_manual_update;} }
 
 	public signal void removed();
 	private bool is_removed = false;
 
         private const int search_delay = 1;
         private uint delayed_changed_id;
-
 
 	public Torrent (Transmission.Torrent torrent){
 		this.torrent = torrent;
@@ -51,6 +51,10 @@ public class Fragments.Torrent : Object{
 		is_removed = true;
 		torrent.remove(false, null);
 		removed();
+	}
+
+	public void manual_update(){
+		if(can_manual_update) torrent.manual_update();
 	}
 
 	private void reset_timeout(){
