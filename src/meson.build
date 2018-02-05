@@ -9,6 +9,7 @@ vala_sources = [
 deps = [
   gtk_dep,
   dazzle_dep,
+  transmission_dep,
   valac.find_library('config', dirs: vapi_dir),
 ]
 

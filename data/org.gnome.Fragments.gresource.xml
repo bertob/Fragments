@@ -4,6 +4,7 @@
     <file>ui/window.ui</file>
     <file>ui/torrent-box.ui</file>
     <file>interface/adwaita.css</file>
+    <file>interface/app-menu.ui</file>
     <file>icons/lightning-symbolic.svg</file>
     <file>icons/speed-limit-off-symbolic.svg</file>
     <file>icons/speed-limit-on-symbolic.svg</file>
