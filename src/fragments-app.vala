@@ -3,11 +3,11 @@ using GLib;
 
 public class Fragments.App : Gtk.Application {
 
-        private Fragments.Window window;
-        private TorrentManager manager;
+	private Fragments.Window window;
+	private TorrentManager manager;
 
 	public App(){
-	        application_id = "org.gnome.Fragments";
+		application_id = "org.gnome.Fragments";
 	}
 
 	protected override void startup () {
@@ -18,9 +18,12 @@ public class Fragments.App : Gtk.Application {
 	}
 
 	protected override void activate (){
-		window = new Fragments.Window(manager);
+		window = new Fragments.Window(ref manager);
 		this.add_window(window);
 		window.present();
+
+		// restore old torrents
+		manager.restore_torrents();
 	}
 
 	private void setup_actions () {
