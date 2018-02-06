@@ -36,6 +36,7 @@
 		"name": "libdazzle",
 		"config-opts": [ "--buildtype=release" ],
 		"buildsystem": "meson",
+		"builddir": true,
 		"sources": [
 		{
 			"type": "git",
