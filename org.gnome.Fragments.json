@@ -131,6 +131,7 @@
         {
                 "name": "fragments",
                 "buildsystem":"meson",
+                "builddir": true,
                 "sources": [
                 {
                         "type": "git",
