@@ -36,7 +36,6 @@
 		"name": "libdazzle",
 		"config-opts": [ "--buildtype=release" ],
 		"buildsystem": "meson",
-		"builddir": true,
 		"sources": [
 		{
 			"type": "git",
@@ -121,7 +120,6 @@
 			"-DINSTALL_DOC=OFF"
 		],
 		"buildsystem": "cmake",
-		"builddir": true,
 		"sources": [
 		{
 			"type": "archive",
@@ -132,7 +130,6 @@
         {
                 "name": "fragments",
                 "buildsystem":"meson",
-                "builddir": true,
                 "sources": [
                 {
                         "type": "git",
