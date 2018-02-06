@@ -13,12 +13,13 @@ public class Fragments.App : Gtk.Application {
 	protected override void startup () {
 		base.startup ();
 
-		manager = new TorrentManager();
 		setup_actions();
+
+		manager = new TorrentManager();
 	}
 
 	protected override void activate (){
-		window = new Fragments.Window(ref manager);
+		window = new Fragments.Window(this, ref manager);
 		this.add_window(window);
 		window.present();
 
@@ -28,7 +29,7 @@ public class Fragments.App : Gtk.Application {
 
 	private void setup_actions () {
 		var action = new GLib.SimpleAction ("preferences", null);
-		//action.activate.connect (() => { window.set_mode(WindowMode.SETTINGS); });
+		action.activate.connect (() => { warning("settings are not working yet"); });
 		this.add_action (action);
 
 		action = new GLib.SimpleAction ("about", null);
@@ -42,7 +43,7 @@ public class Fragments.App : Gtk.Application {
 		// Setup Appmenu
 		var builder = new Gtk.Builder.from_resource ("/org/gnome/Fragments/interface/app-menu.ui");
 		var app_menu = builder.get_object ("app-menu") as GLib.MenuModel;
-		this.set_app_menu (app_menu);
+		set_app_menu (app_menu);
 	}
 
         private void show_about_dialog(){

@@ -85,7 +85,7 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
         [GtkCallback]
         private void remove_button_clicked(){
 		torrent.remove();
-		this.destroy();
+		this.hide();
         }
 
         [GtkCallback]
@@ -98,7 +98,7 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
 
         [GtkCallback]
         private void open_button_clicked(){
-		//message(AppInfo.launch_default_for_uri("file://home/haecker-felix/Dokumente/bank", null).to_string());
+		//TODO: Implement open button
         }
 
         [GtkCallback]

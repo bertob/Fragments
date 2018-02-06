@@ -6,7 +6,9 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 	private TorrentManager manager;
 	[GtkChild] private Gtk.ListBox torrent_listbox;
 
-	public Window (ref TorrentManager manager) {
+	public Window (App app, ref TorrentManager manager) {
+		GLib.Object(application: app);
+
 		this.manager = manager;
 		this.show_all();
 
