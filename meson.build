@@ -18,6 +18,7 @@ po_dir = join_paths(meson.source_root(), 'po')
 glib_dep = dependency('glib-2.0', version : '>=2.38')
 gobject_dep = dependency('gobject-2.0')
 gio_dep = dependency('gio-2.0')
+gio_unix_dep = dependency('gio-unix-2.0')
 gtk_dep = dependency('gtk+-3.0', version : '>=3.20.10')
 dazzle_dep = dependency('libdazzle-1.0', version : '>=3.20.10')
 

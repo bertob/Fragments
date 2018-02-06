@@ -7,7 +7,11 @@ public class Fragments.App : Gtk.Application {
 	private TorrentManager manager;
 
 	public App(){
-		application_id = "org.gnome.Fragments";
+		application_id = "org.gnome.Fragments"; flags = ApplicationFlags.HANDLES_OPEN;
+
+		var appinfo = new DesktopAppInfo ("org.gnome.Fragments.deskop");
+		appinfo.add_supports_type("x-scheme-handler/magnet");
+		appinfo.add_supports_type("application/x-bittorrent");
 	}
 
 	protected override void startup () {
@@ -25,6 +29,18 @@ public class Fragments.App : Gtk.Application {
 
 		// restore old torrents
 		manager.restore_torrents();
+	}
+
+	public override void open (File[] files, string hint) {
+		if (files[0].has_uri_scheme ("magnet")) {
+			var magnet = files[0].get_uri ();
+			magnet = magnet.replace ("magnet:///?", "magnet:?");
+			manager.add_torrent_by_magnet(magnet);
+		}else{
+			foreach (var file in files) {
+				manager.add_torrent_by_path (file.get_path());
+			}
+		}
 	}
 
 	private void setup_actions () {
