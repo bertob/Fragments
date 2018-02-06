@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Fragments
 Exec=fragments
-Icon=org.gnome.Fragments
 Terminal=false
 Type=Application
 Categories=GTK;
