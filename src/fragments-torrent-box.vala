@@ -22,14 +22,18 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
 
         [GtkChild] private ProgressBar progress_bar;
         [GtkChild] private Revealer revealer;
-        [GtkChild] private EventBox torrent_eventbox;
 
         [GtkChild] private Button more_peers_button;
         [GtkChild] private Button open_button;
 
         public TorrentBox(Torrent torrent){
         	this.torrent = torrent;
+		connect_signals();
 
+                revealer.set_reveal_child(false);
+        }
+
+	private void connect_signals(){
         	torrent.notify["name"].connect(() => { title_label.set_text(torrent.name); });
         	torrent.notify["progress"].connect(() => { progress_bar.set_fraction(torrent.progress); });
         	torrent.notify["eta"].connect(() => {
@@ -64,10 +68,8 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
         	torrent.notify["leechers"].connect(() => { leechers_label.set_text(torrent.leechers.to_string()); });
         	torrent.notify["status-text"].connect(() => { status_label.set_text(torrent.status_text); });
 
-                torrent_eventbox.button_press_event.connect(toggle_revealer);
-
-                this.show_all();
-        }
+                this.notify.connect(() => {toggle_revealer(); });
+	}
 
         private bool toggle_revealer (){
                 revealer.set_reveal_child(!revealer.get_reveal_child());
