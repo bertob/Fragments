@@ -35,6 +35,22 @@ public class Fragments.TorrentManager{
 
 		var torrent_constructor = new Transmission.TorrentConstructor (session);
 		torrent_constructor.set_metainfo_from_file (path);
+		add_torrent(ref torrent_constructor);
+
+		return false;
+	}
+
+	public bool add_torrent_by_magnet(string magnet){
+		message("Adding torrent by magnet link \"%s\"...", magnet);
+
+		var torrent_constructor = new Transmission.TorrentConstructor (session);
+		torrent_constructor.set_metainfo_from_magnet_link (magnet);
+		add_torrent(ref torrent_constructor);
+
+		return false;
+	}
+
+	private void add_torrent(ref Transmission.TorrentConstructor torrent_constructor){
 		torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, Environment.get_user_special_dir(GLib.UserDirectory.DOWNLOAD));
 
 		Transmission.ParseResult result;
@@ -45,14 +61,5 @@ public class Fragments.TorrentManager{
 			var ftorrent = new Fragments.Torrent(torrent);
 			torrent_added(ftorrent);
 		}
-
-		return false;
-	}
-
-	public bool add_torrent_by_magnet(string magnet){
-		message("Adding torrent by magnet link \"%s\"...", magnet);
-		warning("not implemented yet");
-
-		return false;
 	}
 }

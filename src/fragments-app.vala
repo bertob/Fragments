@@ -8,10 +8,6 @@ public class Fragments.App : Gtk.Application {
 
 	public App(){
 		application_id = "org.gnome.Fragments"; flags = ApplicationFlags.HANDLES_OPEN;
-
-		var appinfo = new DesktopAppInfo ("org.gnome.Fragments.deskop");
-		appinfo.add_supports_type("x-scheme-handler/magnet");
-		appinfo.add_supports_type("application/x-bittorrent");
 	}
 
 	protected override void startup () {
@@ -32,6 +28,8 @@ public class Fragments.App : Gtk.Application {
 	}
 
 	public override void open (File[] files, string hint) {
+		activate();
+
 		if (files[0].has_uri_scheme ("magnet")) {
 			var magnet = files[0].get_uri ();
 			magnet = magnet.replace ("magnet:///?", "magnet:?");
