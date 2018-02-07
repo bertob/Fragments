@@ -61,5 +61,6 @@ public class Fragments.TorrentManager{
 			var ftorrent = new Fragments.Torrent(torrent);
 			torrent_added(ftorrent);
 		}
+		message("Result: %s", result.to_string());
 	}
 }

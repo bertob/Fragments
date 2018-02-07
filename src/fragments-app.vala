@@ -19,8 +19,7 @@ public class Fragments.App : Gtk.Application {
 	}
 
 	protected override void activate (){
-		window = new Fragments.Window(this, ref manager);
-		this.add_window(window);
+		ensure_window();
 		window.present();
 
 		// restore old torrents
@@ -39,6 +38,13 @@ public class Fragments.App : Gtk.Application {
 				manager.add_torrent_by_path (file.get_path());
 			}
 		}
+	}
+
+	private void ensure_window(){
+		if (get_windows () != null) return;
+
+		window = new Fragments.Window(this, ref manager);
+		this.add_window(window);
 	}
 
 	private void setup_actions () {
