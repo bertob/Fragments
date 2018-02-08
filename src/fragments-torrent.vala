@@ -53,14 +53,14 @@ public class Fragments.Torrent : Object{
 		removed();
 	}
 
-	public void manual_update(){
+	public void update_torrent(){
 		if(can_manual_update) torrent.manual_update();
 	}
 
 	private void reset_timeout(){
 		if(delayed_changed_id > 0)
 			Source.remove(delayed_changed_id);
-		delayed_changed_id = Timeout.add(search_delay, update);
+		delayed_changed_id = Timeout.add(search_delay, update_information);
         }
 
 	public string get_mime_type(){
@@ -76,7 +76,7 @@ public class Fragments.Torrent : Object{
 		return "application/x-bittorrent";
 	}
 
-	private bool update(){
+	public bool update_information(){
 		if(is_removed) return false;
 
 		reset_timeout();

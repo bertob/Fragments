@@ -90,6 +90,7 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
 			torrent.start();
 		else
 			torrent.stop();
+		torrent.update_information();
         }
 
         [GtkCallback]
@@ -101,7 +102,7 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
         [GtkCallback]
         private void more_peers_button_clicked(){
 		if(torrent.can_manual_update)
-			torrent.manual_update();
+			torrent.update_information();
 		else
 			more_peers_button.set_sensitive(false);
         }
