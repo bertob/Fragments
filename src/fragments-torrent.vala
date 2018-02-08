@@ -63,6 +63,19 @@ public class Fragments.Torrent : Object{
 		delayed_changed_id = Timeout.add(search_delay, update);
         }
 
+	public string get_mime_type(){
+		if(torrent.info == null) return "application/x-bittorrent";
+		if (torrent.info.files.length > 1) return "inode/directory";
+
+		var files = torrent.info.files;
+		if (files != null && files.length > 0) {
+			bool certain = false;
+			return ContentType.guess (files[0].name, null, out certain);
+		}
+
+		return "application/x-bittorrent";
+	}
+
 	private bool update(){
 		if(is_removed) return false;
 

@@ -16,6 +16,7 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
         [GtkChild] private Label uploaded_label;
         [GtkChild] private Label upload_speed_label;
 
+	[GtkChild] private Image mime_type_image;
         [GtkChild] private Image turboboost_image;
         [GtkChild] private Image pause_image;
         [GtkChild] private Image start_image;
@@ -29,6 +30,13 @@ public class Fragments.TorrentBox : Gtk.ListBoxRow{
         public TorrentBox(Torrent torrent){
         	this.torrent = torrent;
 		connect_signals();
+
+		// Set mimetype icon
+		IconTheme icontheme = new IconTheme();
+		if(icontheme.has_icon(ContentType.get_generic_icon_name(torrent.get_mime_type())))
+			mime_type_image.set_from_gicon(ContentType.get_symbolic_icon(torrent.get_mime_type()), Gtk.IconSize.MENU);
+		else
+			mime_type_image.set_from_gicon(ContentType.get_symbolic_icon("text-x-generic"), Gtk.IconSize.MENU);
 
                 revealer.set_reveal_child(false);
         }
