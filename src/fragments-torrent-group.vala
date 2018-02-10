@@ -16,6 +16,6 @@ public class Fragments.TorrentGroup : Gtk.Box{
 
         public void add_torrent(Torrent torrent){
 		torrent_list.insert(torrent, 0);
-		torrent_listbox.add(new TorrentBox(torrent_list.nth_data(0)));
+		torrent_listbox.add(torrent);
         }
 }

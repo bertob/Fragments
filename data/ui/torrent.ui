@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.20.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <template class="FragmentsTorrentBox" parent="GtkListBoxRow">
+  <template class="FragmentsTorrent" parent="GtkListBoxRow">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
@@ -48,11 +48,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="title_label">
+                          <object class="GtkLabel" id="name_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label">Title</property>
+                            <property name="label">Name</property>
                             <property name="ellipsize">end</property>
                             <property name="single_line_mode">True</property>
                             <property name="max_width_chars">60</property>
@@ -511,12 +511,12 @@
                     <property name="border_width">12</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkButton" id="more_peers_button">
+                      <object class="GtkButton" id="manual_update_button">
                         <property name="label" translatable="yes">Request more peers</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="more_peers_button_clicked" swapped="no"/>
+                        <signal name="clicked" handler="manual_update_button_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
