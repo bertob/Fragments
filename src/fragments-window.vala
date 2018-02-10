@@ -4,7 +4,7 @@ using Gtk;
 public class Fragments.Window : Gtk.ApplicationWindow {
 
 	private TorrentManager manager;
-	[GtkChild] private Gtk.ListBox torrent_listbox;
+	[GtkChild] private Gtk.Box torrent_group_box;
 
 	public Window (App app, ref TorrentManager manager) {
 		GLib.Object(application: app);
@@ -16,7 +16,12 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 		provider.load_from_resource ("/org/gnome/Fragments/interface/adwaita.css");
 		StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 
-		manager.torrent_added.connect((torrent) => { torrent_listbox.add(new TorrentBox(torrent)); });
+		TorrentGroup downloading_group = new TorrentGroup("Downloading", false);
+		TorrentGroup seeding_group = new TorrentGroup("Seeding", false);
+		torrent_group_box.add(downloading_group);
+		torrent_group_box.add(seeding_group);
+
+		manager.torrent_added.connect((torrent) => { downloading_group.add_torrent(torrent); });
 	}
 
 	[GtkCallback]
