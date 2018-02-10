@@ -84,13 +84,10 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 				pause_image.set_visible(true);
         		}
         	});
-
-		this.notify.connect(() => {toggle_revealer(); });
 	}
 
-        private bool toggle_revealer (){
+        public void toggle_revealer (){
                 revealer.set_reveal_child(!revealer.get_reveal_child());
-                return false;
         }
 
         [GtkCallback]

@@ -12,6 +12,10 @@ public class Fragments.TorrentGroup : Gtk.Box{
 		title_label.set_text(title);
 
 		torrent_list = new List<Torrent>();
+
+		torrent_listbox.row_activated.connect((row) => {
+			((Torrent)row).toggle_revealer();
+		});
         }
 
         public void add_torrent(Torrent torrent){
