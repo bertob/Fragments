@@ -16,12 +16,12 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 		provider.load_from_resource ("/org/gnome/Fragments/interface/adwaita.css");
 		StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 
-		TorrentGroup downloading_group = new TorrentGroup("Downloading", false);
-		TorrentGroup seeding_group = new TorrentGroup("Seeding", false);
+		TorrentGroup downloading_group = new TorrentGroup("Downloading", ref manager.downloading_torrents, false);
+		TorrentGroup seeding_group = new TorrentGroup("Seeding", ref manager.seeding_torrents, false);
+		TorrentGroup queued_group = new TorrentGroup("Queued", ref manager.queued_torrents, false);
 		torrent_group_box.add(downloading_group);
 		torrent_group_box.add(seeding_group);
-
-		manager.torrent_added.connect((torrent) => { downloading_group.add_torrent(torrent); });
+		torrent_group_box.add(queued_group);
 	}
 
 	[GtkCallback]

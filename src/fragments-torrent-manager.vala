@@ -5,9 +5,9 @@ public class Fragments.TorrentManager{
 
         private static string CONFIG_DIR = GLib.Path.build_path(GLib.Path.DIR_SEPARATOR_S, Environment.get_user_config_dir(), "fragments");
 
-	private List<Torrent> torrent_list;
-	public signal void torrent_added(Torrent torrent);
-	public signal void torrent_removed(Torrent torrent);
+	public TorrentModel queued_torrents;
+	public TorrentModel downloading_torrents;
+	public TorrentModel seeding_torrents;
 
         public TorrentManager(){
 		Transmission.String.Units.mem_init(1024, _("KB"), _("MB"), _("GB"), _("TB"));
@@ -17,7 +17,9 @@ public class Fragments.TorrentManager{
                 Transmission.load_default_settings(ref settings, CONFIG_DIR, "fragments");
                 session = new Transmission.Session(CONFIG_DIR, false, settings);
 
-		torrent_list = new List<Torrent>();
+		queued_torrents = new TorrentModel();
+		downloading_torrents = new TorrentModel();
+		seeding_torrents = new TorrentModel();
         }
 
         public void restore_torrents(){
@@ -25,8 +27,8 @@ public class Fragments.TorrentManager{
 		unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
                 for (int i = 0; i < transmission_torrents.length; i++) {
                 	var torrent = new Torrent(transmission_torrents[i]);
-			torrent_list.append(torrent);
-			torrent_added(torrent);
+                	torrent.notify["status"].connect(() => { update_torrent(torrent); });
+			update_torrent(torrent);
 		}
         }
 
@@ -59,8 +61,34 @@ public class Fragments.TorrentManager{
 
 		if (result == Transmission.ParseResult.OK) {
 			var ftorrent = new Fragments.Torrent(torrent);
-			torrent_added(ftorrent);
+			ftorrent.notify["status"].connect(() => { update_torrent(ftorrent); });
+			update_torrent(ftorrent);
 		}
 		message("Result: %s", result.to_string());
+	}
+
+	private void update_torrent(Torrent torrent){
+		if(torrent.status == Status.SEEDING){
+			if(seeding_torrents.contains_torrent(torrent)) return;
+			else{
+				if(downloading_torrents.contains_torrent(torrent)) downloading_torrents.remove_torrent(torrent);
+				if(queued_torrents.contains_torrent(torrent)) queued_torrents.remove_torrent(torrent);
+				seeding_torrents.add_torrent(torrent);
+			}
+		}else if(torrent.status == Status.DOWNLOADING){
+			if(downloading_torrents.contains_torrent(torrent)) return;
+			else{
+				if(seeding_torrents.contains_torrent(torrent)) seeding_torrents.remove_torrent(torrent);
+				if(queued_torrents.contains_torrent(torrent)) queued_torrents.remove_torrent(torrent);
+				downloading_torrents.add_torrent(torrent);
+			}
+		}else{
+			if(queued_torrents.contains_torrent(torrent)) return;
+			else{
+				if(seeding_torrents.contains_torrent(torrent)) seeding_torrents.remove_torrent(torrent);
+				if(downloading_torrents.contains_torrent(torrent)) downloading_torrents.remove_torrent(torrent);
+				queued_torrents.add_torrent(torrent);
+			}
+		}
 	}
 }

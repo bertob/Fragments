@@ -1,0 +1,157 @@
+{
+    "app-id" : "org.gnome.Fragments",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "3.26",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "fragments",
+    "finish-args" : [
+        "--filesystem=host",
+        "--device=dri",
+        "--share=network",
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "build-options" : {
+        "build-args" : [
+            "--share=network"
+        ],
+        "env" : {
+        }
+    },
+    "cleanup" : [
+        "/include",
+        "/lib/pkgconfig",
+        "/man",
+        "/share/doc",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/pkgconfig",
+        "/share/vala",
+        "*.la",
+        "*.a"
+    ],
+    "modules" : [
+        {
+            "name" : "libdazzle",
+            "config-opts" : [
+                "--buildtype=release"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git",
+                    "branch" : "libdazzle-3-26"
+                }
+            ]
+        },
+        {
+            "name" : "libevent",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz",
+                    "sha256" : "965cc5a8bb46ce4199a47e9b2c9e1cae3b137e8356ffdad6d94d3b9069b71dc2"
+                }
+            ]
+        },
+        {
+            "name" : "dht",
+            "buildsystem" : "cmake",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "post-0.24-transmission",
+                    "url" : "https://github.com/transmission/dht"
+                }
+            ]
+        },
+        {
+            "name" : "miniupnpc",
+            "buildsystem" : "cmake",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "post-2.0.20170509-transmission",
+                    "url" : "https://github.com/transmission/miniupnpc"
+                }
+            ]
+        },
+        {
+            "name" : "libnatpmp",
+            "buildsystem" : "cmake",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "post-20151025-transmission",
+                    "url" : "https://github.com/transmission/libnatpmp"
+                }
+            ]
+        },
+        {
+            "name" : "b64",
+            "buildsystem" : "cmake",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "post-1.2.1-transmission",
+                    "url" : "https://github.com/transmission/libb64/"
+                }
+            ]
+        },
+        {
+            "name" : "libutp",
+            "buildsystem" : "cmake",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "branch" : "post-3.3-transmission",
+                    "url" : "https://github.com/transmission/libutp"
+                }
+            ]
+        },
+        {
+            "name" : "transmission",
+            "config-opts" : [
+                "-DUSE_SYSTEM_EVENT2=ON",
+                "-DUSE_SYSTEM_DHT=ON",
+                "-DUSE_SYSTEM_MINIUPNPC=ON",
+                "-DUSE_SYSTEM_NATPMP=ON",
+                "-DUSE_SYSTEM_UTP=ON",
+                "-DUSE_SYSTEM_B64=ON",
+                "-DINSTALL_LIB=ON",
+                "-DENABLE_DAEMON=OFF",
+                "-DENABLE_UTILS=OFF",
+                "-DENABLE_TESTS=OFF",
+                "-DENABLE_GTK=OFF",
+                "-DENABLE_QT=OFF",
+                "-DINSTALL_DOC=OFF"
+            ],
+            "buildsystem" : "cmake",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://github.com/transmission/transmission-releases/raw/master/transmission-2.92.tar.xz",
+                    "sha256" : "3a8d045c306ad9acb7bf81126939b9594553a388482efa0ec1bfb67b22acd35f"
+                }
+            ]
+        },
+        {
+            "name" : "fragments",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/FragmentsApp/Fragments"
+                }
+            ]
+        }
+    ]
+}
