@@ -14,11 +14,17 @@ public class Fragments.TorrentGroup : Gtk.Box{
 		model.items_changed.connect((pos, removed, added) => {
 			if(added == 1) add((int)pos);
 			if(removed == 1) remove((int)pos);
+			update_visibility();
 		});
 
 		torrent_listbox.row_activated.connect((row) => {
 			((Torrent)row).toggle_revealer();
 		});
+        }
+
+        private void update_visibility(){
+        	if(model.get_n_items() == 0) this.hide();
+		else this.show();
         }
 
         private void add(int pos){
