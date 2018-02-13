@@ -20,6 +20,8 @@ public class Fragments.TorrentGroup : Gtk.Box{
 		torrent_listbox.row_activated.connect((row) => {
 			((Torrent)row).toggle_revealer();
 		});
+
+		update_visibility();
         }
 
         private void update_visibility(){
