@@ -18,7 +18,7 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 
 		TorrentGroup downloading_group = new TorrentGroup("Downloading", ref manager.downloading_torrents, false);
 		TorrentGroup seeding_group = new TorrentGroup("Seeding", ref manager.seeding_torrents, false);
-		TorrentGroup queued_group = new TorrentGroup("Queued", ref manager.queued_torrents, false);
+		TorrentGroup queued_group = new TorrentGroup("Queued", ref manager.queued_torrents, true);
 		torrent_group_box.add(downloading_group);
 		torrent_group_box.add(seeding_group);
 		torrent_group_box.add(queued_group);

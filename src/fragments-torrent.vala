@@ -50,13 +50,17 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 	private const int search_delay = 1;
         private uint delayed_changed_id;
 
+        // Don't update torrent information. Useful for dnd.
+	public bool pause_torrent_update = false;
+
 	// Other
 	[GtkChild] private Image mime_type_image;
         [GtkChild] private Image turboboost_image;
         [GtkChild] private Image pause_image;
         [GtkChild] private Image start_image;
         [GtkChild] private Revealer revealer;
-        [GtkChild] private Button open_button;
+	[GtkChild] private Button open_button;
+	[GtkChild] public EventBox eventbox;
 
         public Torrent(Transmission.Torrent torrent){
         	this.torrent = torrent;
@@ -71,7 +75,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
 	private void reset_timeout(){
 		if(delayed_changed_id > 0) Source.remove(delayed_changed_id);
-		delayed_changed_id = Timeout.add(search_delay, update_information);
+		delayed_changed_id = Timeout.add_seconds(search_delay, update_information);
         }
 
 	private void connect_signals(){
@@ -84,10 +88,19 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 				pause_image.set_visible(true);
         		}
         	});
+
+        	eventbox.drag_begin.connect(() => {
+			revealer.set_reveal_child(false);
+        		pause_torrent_update = true;
+        	});
+
+        	eventbox.drag_end.connect(() => {
+        		pause_torrent_update = false;
+        	});
 	}
 
         public void toggle_revealer (){
-                revealer.set_reveal_child(!revealer.get_reveal_child());
+		revealer.set_reveal_child(!revealer.get_reveal_child());
         }
 
         [GtkCallback]
@@ -153,7 +166,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 		if(torrent == null) return false;
 
 		reset_timeout();
-		if(torrent.stat_cached == null) return false;
+		if(torrent.stat_cached == null || pause_torrent_update) return false;
 
 		// Progress
                 progress_bar.set_fraction(torrent.stat_cached.percentDone);
@@ -221,5 +234,4 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
                 return false;
         }
-
 }
