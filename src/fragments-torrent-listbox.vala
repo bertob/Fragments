@@ -93,7 +93,8 @@ class Fragments.TorrentListBox : ListBox {
 		int index = 0;
 		if (hover_row != null) {
 			if (top) {
-				index = hover_row.get_index () - 1;
+				index = hover_row.get_index ();
+				if(index == -1) index = 0;
 				hover_row.get_style_context ().remove_class ("drag-hover-top");
 			} else {
 				index = hover_row.get_index ();
@@ -115,6 +116,7 @@ class Fragments.TorrentListBox : ListBox {
 			drag_source_set (row.eventbox, Gdk.ModifierType.BUTTON1_MASK, entries, Gdk.DragAction.MOVE);
 			row.eventbox.drag_begin.connect (row_drag_begin);
 			row.eventbox.drag_data_get.connect (row_drag_data_get);
+			row.show_index_number = true;
 		}
 
 		this.insert(row, pos);
@@ -125,6 +127,7 @@ class Fragments.TorrentListBox : ListBox {
 			drag_source_unset (row.eventbox);
 			row.eventbox.drag_begin.disconnect (row_drag_begin);
 			row.eventbox.drag_data_get.disconnect (row_drag_data_get);
+			row.show_index_number = false;
 		}
 
 		this.remove(row);

@@ -53,6 +53,10 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         // Don't update torrent information. Useful for dnd.
 	public bool pause_torrent_update = false;
 
+	// Show Gtk.ListBox index number.
+	public bool show_index_number { get; set; }
+	[GtkChild] private Label index_label;
+
 	// Other
 	[GtkChild] private Image mime_type_image;
         [GtkChild] private Image turboboost_image;
@@ -64,6 +68,8 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
         public Torrent(Transmission.Torrent torrent){
         	this.torrent = torrent;
+        	show_index_number = false;
+
         	name_label.set_text(torrent.name);
 
 		// set correct mimetype image
@@ -89,12 +95,17 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         		}
         	});
 
+        	this.notify["show-index-number"].connect(() => {
+        		index_label.set_visible(show_index_number);
+        	});
+
         	eventbox.drag_begin.connect(() => {
-			revealer.set_reveal_child(false);
+        		Timeout.add(1, () =>{ this.set_visible(false); return false; });
         		pause_torrent_update = true;
         	});
 
         	eventbox.drag_end.connect(() => {
+        		this.set_visible(true);
         		pause_torrent_update = false;
         	});
 	}
@@ -164,9 +175,12 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
 	private bool update_information(){
 		if(torrent == null) return false;
-
 		reset_timeout();
-		if(torrent.stat_cached == null || pause_torrent_update) return false;
+
+		if(pause_torrent_update) return false;
+		if(show_index_number) index_label.set_text((this.get_index()+1).to_string());
+
+		if(torrent.stat_cached == null) return false;
 
 		// Progress
                 progress_bar.set_fraction(torrent.stat_cached.percentDone);
