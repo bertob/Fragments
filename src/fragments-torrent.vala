@@ -47,7 +47,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 	[GtkChild] private Button manual_update_button;
 
 	// Update interval
-	private const int search_delay = 1;
+	private const int search_delay = 3;
         private uint delayed_changed_id;
 
         // Don't update torrent information. Useful for dnd.
@@ -77,6 +77,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
 		connect_signals();
 		reset_timeout();
+		update_information();
         }
 
 	private void reset_timeout(){
@@ -125,6 +126,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 			start_image.set_visible(true);
 			pause_image.set_visible(false);
 		}
+		update_information();
         }
 
         [GtkCallback]
