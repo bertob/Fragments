@@ -131,9 +131,28 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
         [GtkCallback]
         private void remove_button_clicked(){
-		torrent.remove(false, null);
-		torrent = null;
-		this.hide();
+        	Gtk.MessageDialog msg = new Gtk.MessageDialog (App.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, "");
+
+		msg.secondary_text = _("Once removed, continuing the transfer will require the torrent file or magnet link.");
+		msg.text = _("Remove Torrent?");
+
+		msg.add_button(_("Cancel"), 0);
+		msg.add_button(_("Remove"), 1);
+
+		Box message_area = (Box)msg.get_message_area();
+		CheckButton checkbutton = new CheckButton.with_label(_("Remove downloaded data as well"));
+		checkbutton.set_visible(true);
+		message_area.add(checkbutton);
+
+		msg.response.connect ((response_id) => {
+			if(response_id == 1){
+				torrent.remove(checkbutton.active, null);
+				torrent = null;
+				this.hide();
+			}
+			msg.destroy();
+		});
+		msg.show ();
         }
 
         [GtkCallback]

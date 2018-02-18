@@ -3,7 +3,7 @@ using GLib;
 
 public class Fragments.App : Gtk.Application {
 
-	private Fragments.Window window;
+	public static Fragments.Window window;
 	private TorrentManager manager;
 
 	public App(){
