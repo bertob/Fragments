@@ -37,21 +37,6 @@
     ],
     "modules" : [
         {
-            "name" : "libdazzle",
-            "config-opts" : [
-                "--buildtype=release"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git",
-                    "branch" : "libdazzle-3-26"
-                }
-            ]
-        },
-        {
             "name" : "libevent",
             "sources" : [
                 {
