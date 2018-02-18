@@ -15,6 +15,7 @@ public class Fragments.TorrentManager{
 
                 settings = Transmission.variant_dict(0);
                 Transmission.load_default_settings(ref settings, CONFIG_DIR, "fragments");
+                settings.add_int (Transmission.Prefs.download_queue_size, 2);
                 session = new Transmission.Session(CONFIG_DIR, false, settings);
 
 		queued_torrents = new TorrentModel();
