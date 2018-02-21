@@ -15,12 +15,26 @@ public class Fragments.TorrentManager{
 
                 settings = Transmission.variant_dict(0);
                 Transmission.load_default_settings(ref settings, CONFIG_DIR, "fragments");
-                settings.add_int (Transmission.Prefs.download_queue_size, 2);
+
                 session = new Transmission.Session(CONFIG_DIR, false, settings);
+                if(App.settings.download_folder == "") App.settings.download_folder = Environment.get_user_special_dir(GLib.UserDirectory.DOWNLOAD);
 
 		queued_torrents = new TorrentModel();
 		downloading_torrents = new TorrentModel();
 		seeding_torrents = new TorrentModel();
+
+		update_transmission_settings();
+		connect_signals();
+        }
+
+        private void connect_signals(){
+		App.settings.notify["max-downloads"].connect(update_transmission_settings);
+        }
+
+        private void update_transmission_settings(){
+                settings.add_int (Transmission.Prefs.download_queue_size, App.settings.max_downloads);
+		session.update_settings (settings);
+
         }
 
         public void restore_torrents(){
@@ -54,7 +68,7 @@ public class Fragments.TorrentManager{
 	}
 
 	private void add_torrent(ref Transmission.TorrentConstructor torrent_constructor){
-		torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, Environment.get_user_special_dir(GLib.UserDirectory.DOWNLOAD));
+		torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, App.settings.download_folder);
 
 		Transmission.ParseResult result;
 		int duplicate_id;

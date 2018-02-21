@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="fragments">
-	<schema id="org.gnome.Fragments" path="/org/gnome/Fragments/">
-	</schema>
+  <schema id="org.gnome.Fragments" path="/org/gnome/Fragments/">
+
+    <key name="enable-dark-theme" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="download-folder" type="s">
+      <default>""</default>
+    </key>
+
+    <key name="max-downloads" type="i">
+      <default>3</default>
+    </key>
+
+  </schema>
 </schemalist>

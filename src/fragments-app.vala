@@ -4,6 +4,8 @@ using GLib;
 public class Fragments.App : Gtk.Application {
 
 	public static Fragments.Window window;
+	public static Settings settings;
+
 	private TorrentManager manager;
 
 	public App(){
@@ -13,8 +15,8 @@ public class Fragments.App : Gtk.Application {
 	protected override void startup () {
 		base.startup ();
 
+		settings = new Settings();
 		setup_actions();
-
 		manager = new TorrentManager();
 	}
 
@@ -49,7 +51,12 @@ public class Fragments.App : Gtk.Application {
 
 	private void setup_actions () {
 		var action = new GLib.SimpleAction ("preferences", null);
-		action.activate.connect (() => { warning("settings are not working yet"); });
+		action.activate.connect (() => {
+			var settings_window = new SettingsWindow();
+			settings_window.set_transient_for(App.window);
+			settings_window.set_modal(true);
+			settings_window.set_visible(true);
+		});
 		this.add_action (action);
 
 		action = new GLib.SimpleAction ("about", null);

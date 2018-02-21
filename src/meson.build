@@ -6,12 +6,13 @@ vala_sources = [
   'fragments-torrent-manager.vala',
   'fragments-torrent-model.vala',
   'fragments-torrent-listbox.vala',
+  'fragments-settings-window.vala',
+  'fragments-settings.vala',
   'fragments-window.vala'
 ]
 
 deps = [
   gtk_dep,
-  dazzle_dep,
   gio_unix_dep,
   transmission_dep,
   valac.find_library('config', dirs: vapi_dir),

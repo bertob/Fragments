@@ -22,6 +22,18 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 		torrent_group_box.pack_start(downloading_group, false, false, 0);
 		torrent_group_box.pack_start(queued_group, false, false, 0);
 		torrent_group_box.pack_start(seeding_group, false, false, 0);
+
+		update_gtk_theme();
+		connect_signals();
+	}
+
+	private void connect_signals(){
+		App.settings.notify["enable-dark-theme"].connect(update_gtk_theme);
+	}
+
+	private void update_gtk_theme(){
+		var gtk_settings = Gtk.Settings.get_default ();
+		gtk_settings.gtk_application_prefer_dark_theme = App.settings.enable_dark_theme;
 	}
 
 	[GtkCallback]
