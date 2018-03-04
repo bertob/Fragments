@@ -1,3 +1,4 @@
 .flatpak-builder
 org.gnome.Fragments.json~
 _build
+*.ui~
