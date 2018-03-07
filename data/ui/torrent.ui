@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.20.3 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <template class="FragmentsTorrent" parent="GtkListBoxRow">
@@ -21,14 +21,35 @@
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
                 <child>
-                  <object class="GtkLabel" id="index_label">
+                  <object class="GtkStack" id="index_stack">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="margin_right">12</property>
-                    <property name="label" translatable="yes">1</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
+                    <property name="transition_type">crossfade</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">media-playback-pause-symbolic</property>
+                      </object>
+                      <packing>
+                        <property name="name">stopped</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="index_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">1</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="name">indexnumber</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

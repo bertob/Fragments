@@ -84,6 +84,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         [GtkChild] private Revealer revealer;
 	[GtkChild] private Button open_button;
 	[GtkChild] public EventBox eventbox;
+	[GtkChild] public Stack index_stack;
 
         public Torrent(Transmission.Torrent torrent){
         	this.torrent = torrent;
@@ -109,14 +110,16 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         		if(activity == Transmission.Activity.STOPPED){
 				start_image.set_visible(true);
 				pause_image.set_visible(false);
+				index_stack.set_visible_child_name("stopped");
         		}else{
         			start_image.set_visible(false);
 				pause_image.set_visible(true);
+				index_stack.set_visible_child_name("indexnumber");
         		}
         	});
 
         	this.notify["show-index-number"].connect(() => {
-        		index_label.set_visible(show_index_number);
+        		index_stack.set_visible(show_index_number);
         	});
 
         	eventbox.drag_begin.connect(() => {
