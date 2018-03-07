@@ -2,7 +2,7 @@
 A new GTK3 BitTorrent Client, which is still under heavy development. 
 ![mockup](https://i.imgur.com/haoiesX.png)
 
-Fragments does not aim to integrate as many features or settings as possible. There are plenty of other torrent clients for that. Fragments is an easy to use lightweight BitTorrent client which follows the GNOME HIG and includes well thought-out features.
+Fragments does not aim to integrate as many features or settings as possible. There are plenty of other torrent clients for that. Fragments is an easy to use BitTorrent client which follows the GNOME HIG and includes well thought-out features.
 
 You can try out the latest nightly build.
  Make sure you have Flatpak installed. [Get more information](http://flatpak.org/getting.html)

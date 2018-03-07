@@ -106,9 +106,16 @@ class Fragments.TorrentListBox : ListBox {
 			if (row != hover_row) {
 				row.get_parent ().remove (row);
 				insert (row, index);
+				update_index_number();
 			}
 		}
 		drag_row = null;
+	}
+
+	private void update_index_number(){
+		this.@foreach ((torrent) => {
+			((Torrent)torrent).index_label.set_text((((Torrent)torrent).get_index()+1).to_string());
+		});
 	}
 
 	public void add_torrent (Torrent row, int pos) {
@@ -120,6 +127,7 @@ class Fragments.TorrentListBox : ListBox {
 		}
 
 		this.insert(row, pos);
+		update_index_number();
 	}
 
 	public void remove_torrent (Torrent row) {
@@ -131,5 +139,6 @@ class Fragments.TorrentListBox : ListBox {
 		}
 
 		this.remove(row);
+		update_index_number();
 	}
 }

@@ -42,7 +42,7 @@ public class Fragments.TorrentManager{
 		unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
                 for (int i = 0; i < transmission_torrents.length; i++) {
                 	var torrent = new Torrent(transmission_torrents[i]);
-                	torrent.notify["status"].connect(() => { update_torrent(torrent); });
+                	torrent.notify["activity"].connect(() => { update_torrent(torrent); });
 			update_torrent(torrent);
 		}
         }
@@ -76,21 +76,21 @@ public class Fragments.TorrentManager{
 
 		if (result == Transmission.ParseResult.OK) {
 			var ftorrent = new Fragments.Torrent(torrent);
-			ftorrent.notify["status"].connect(() => { update_torrent(ftorrent); });
+			ftorrent.notify["activity"].connect(() => { update_torrent(ftorrent); });
 			update_torrent(ftorrent);
 		}
 		message("Result: %s", result.to_string());
 	}
 
 	private void update_torrent(Torrent torrent){
-		if(torrent.status == Status.SEEDING){
+		if(torrent.activity == Transmission.Activity.SEED || torrent.activity == Transmission.Activity.SEED_WAIT){
 			if(seeding_torrents.contains_torrent(torrent)) return;
 			else{
 				if(downloading_torrents.contains_torrent(torrent)) downloading_torrents.remove_torrent(torrent);
 				if(queued_torrents.contains_torrent(torrent)) queued_torrents.remove_torrent(torrent);
 				seeding_torrents.add_torrent(torrent);
 			}
-		}else if(torrent.status == Status.DOWNLOADING){
+		}else if(torrent.activity == Transmission.Activity.DOWNLOAD){
 			if(downloading_torrents.contains_torrent(torrent)) return;
 			else{
 				if(seeding_torrents.contains_torrent(torrent)) seeding_torrents.remove_torrent(torrent);

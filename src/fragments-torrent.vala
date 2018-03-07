@@ -1,12 +1,5 @@
 using Gtk;
 
-public enum Fragments.Status{
-	DOWNLOADING,
-	SEEDING,
-	QUEUED,
-	STOPPED
-}
-
 [GtkTemplate (ui = "/org/gnome/Fragments/ui/torrent.ui")]
 public class Fragments.Torrent : Gtk.ListBoxRow{
 
@@ -16,38 +9,64 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         [GtkChild] private Label name_label;
 
 	// Status
-	public Status status { get; set; }
+	public Transmission.Activity activity { get; set; }
         [GtkChild] private Label status_label;
 
 	// ETA
         [GtkChild] private Label eta_label;
+        public uint eta { get{ return torrent.stat_cached.eta; } }
 
 	// Progress
         [GtkChild] private ProgressBar progress_bar;
+        public double progress { get{ return torrent.stat_cached.percentDone; } }
 
 	// Seeders
         [GtkChild] private Label seeders_label;
+        public int seeders_active { get{ return torrent.stat_cached.peersSendingToUs; } }
+        public int seeders { get{ return torrent.stat_cached.peersConnected; } }
 
         // Leechers
         [GtkChild] private Label leechers_label;
+        public int leechers { get{ return torrent.stat_cached.peersGettingFromUs; } }
 
 	// Downloaded bytes
         [GtkChild] private Label downloaded_label;
+        public uint64 downloaded { get{ return torrent.stat_cached.haveValid; } }
 
 	// Uploaded bytes
         [GtkChild] private Label uploaded_label;
+        public uint64 uploaded { get{ return torrent.stat_cached.uploadedEver; } }
 
 	// Download speed
         [GtkChild] private Label download_speed_label;
+        private string _download_speed;
+        public string download_speed {
+        	get{
+        		char[40] buf = new char[40];
+        		_download_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceDownloadSpeed_KBps);
+			return _download_speed;
+        	}
+        }
 
 	// Upload speed
         [GtkChild] private Label upload_speed_label;
+        private string _upload_speed;
+        public string upload_speed {
+        	get{
+        		char[40] buf = new char[40];
+			_upload_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceUploadSpeed_KBps);
+			return _upload_speed;
+        	}
+        }
+
+        // Torrent size
+        public uint64 size { get{ return torrent.stat_cached.sizeWhenDone; } }
 
 	// Manual update
 	[GtkChild] private Button manual_update_button;
 
 	// Update interval
-	private const int search_delay = 3;
+	private const int search_delay = 1;
         private uint delayed_changed_id;
 
         // Don't update torrent information. Useful for dnd.
@@ -55,7 +74,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
 	// Show Gtk.ListBox index number.
 	public bool show_index_number { get; set; }
-	[GtkChild] private Label index_label;
+	[GtkChild] public Label index_label;
 
 	// Other
 	[GtkChild] private Image mime_type_image;
@@ -86,8 +105,8 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         }
 
 	private void connect_signals(){
-        	this.notify["status"].connect(() => {
-        		if(status == Status.STOPPED){
+        	this.notify["activity"].connect(() => {
+        		if(activity == Transmission.Activity.STOPPED){
 				start_image.set_visible(true);
 				pause_image.set_visible(false);
         		}else{
@@ -117,15 +136,11 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
         [GtkCallback]
         private void pause_button_clicked(){
-		if(status == Status.STOPPED){
+		if(activity == Transmission.Activity.STOPPED)
 			torrent.start();
-			start_image.set_visible(false);
-			pause_image.set_visible(true);
-		}else{
+		else
 			torrent.stop();
-			start_image.set_visible(true);
-			pause_image.set_visible(false);
-		}
+
 		update_information();
         }
 
@@ -191,81 +206,46 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 			mime_type_image.set_from_gicon(ContentType.get_symbolic_icon(mime_type), Gtk.IconSize.MENU);
 		else
 			mime_type_image.set_from_gicon(ContentType.get_symbolic_icon("text-x-generic"), Gtk.IconSize.MENU);
+	}
 
+	public string generate_activity_text(){
+		string st = "";
+                switch(torrent.stat_cached.activity){
+                	case Transmission.Activity.STOPPED: { st = _("Stopped"); break;}
+			case Transmission.Activity.SEED: { st = _("%s uploaded · %s".printf(format_size(uploaded), upload_speed)); break;}
+			case Transmission.Activity.SEED_WAIT: { st = _("Queued to seed"); break;}
+			case Transmission.Activity.DOWNLOAD: { st = _("%s of %s downloaded · %s").printf(format_size(downloaded), format_size(size), download_speed); break;}
+			case Transmission.Activity.DOWNLOAD_WAIT: { st = _("Queued to download"); break;}
+			case Transmission.Activity.CHECK: { st = _("Checking files…"); break;}
+			case Transmission.Activity.CHECK_WAIT: { st = _("Queued to check files"); break;}
+		}
+
+		return st;
 	}
 
 	private bool update_information(){
 		if(torrent == null) return false;
+
 		reset_timeout();
+		if(pause_torrent_update || torrent.stat_cached == null) return false;
 
-		if(pause_torrent_update) return false;
-		if(show_index_number) index_label.set_text((this.get_index()+1).to_string());
+		this.activity = torrent.stat_cached.activity;
+		notify_property("activity");
 
-		if(torrent.stat_cached == null) return false;
+		status_label.set_text(generate_activity_text());
 
-		// Progress
-                progress_bar.set_fraction(torrent.stat_cached.percentDone);
-
-                // ETA
-                var eta = torrent.stat_cached.eta;
-                if(eta != uint.MAX) eta_label.set_text("%s left".printf(Utils.time_to_string(eta)));
+                progress_bar.set_fraction(progress);
+                if(eta != uint.MAX || eta == 0) eta_label.set_text("%s left".printf(Utils.time_to_string(eta)));
 		else eta_label.set_text("");
 
-		// Download and Upload Speed
-		char[40] buf = new char[40];
-		var download_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceDownloadSpeed_KBps);
-		var upload_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceUploadSpeed_KBps);
 		download_speed_label.set_text(download_speed);
 		upload_speed_label.set_text(upload_speed);
 
-		// Downloaded and Uploaded Bytes
-		downloaded_label.set_text(format_size(torrent.stat_cached.haveValid));
-		uploaded_label.set_text(format_size(torrent.stat_cached.uploadedEver));
+		downloaded_label.set_text(format_size(downloaded));
+		uploaded_label.set_text(format_size(uploaded));
 
-		// Seeders and Leechers
-		leechers_label.set_text(torrent.stat_cached.peersGettingFromUs.to_string());
-		seeders_label.set_text(_("%i (%i active)").printf(
-			torrent.stat_cached.peersConnected,
-			torrent.stat_cached.peersSendingToUs));
-
-		// Set status and generate status text
-		string status_text = "";
-                switch(torrent.stat_cached.activity){
-			case Transmission.Activity.SEED: {
-				status_text = _("%s uploaded · %s".printf(
-					format_size(torrent.stat_cached.uploadedEver),
-					upload_speed));
-				status = Status.SEEDING;
-				break;}
-			case Transmission.Activity.CHECK: {
-				status_text = _("Checking files...");
-				status = Status.DOWNLOADING;
-				break;}
-			case Transmission.Activity.STOPPED: {
-				status_text = _("Stopped");
-				status = Status.STOPPED;
-				break;}
-			case Transmission.Activity.DOWNLOAD: {
-				status_text = _("%s of %s downloaded · %s").printf(
-					format_size(torrent.stat_cached.haveValid),
-					format_size(torrent.stat_cached.sizeWhenDone),
-					download_speed);
-				status = Status.DOWNLOADING;
-				break;}
-			case Transmission.Activity.SEED_WAIT: {
-				status_text = _("Queued to seed");
-				status = Status.SEEDING;
-				break;}
-			case Transmission.Activity.CHECK_WAIT: {
-				status_text = _("Queued to check files");
-				status = Status.DOWNLOADING;
-				break;}
-			case Transmission.Activity.DOWNLOAD_WAIT: {
-				status_text = _("Queued to download");
-				status = Status.QUEUED;
-				break;}
-		}
-		status_label.set_text(status_text);
+		leechers_label.set_text(leechers.to_string());
+		seeders_label.set_text(_("%i (%i active)").printf(seeders, seeders_active));
 
                 return false;
         }
