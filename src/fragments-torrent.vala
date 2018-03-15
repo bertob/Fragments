@@ -116,6 +116,9 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 	       		}else if (activity == Transmission.Activity.DOWNLOAD_WAIT){
 				index_stack.set_visible(true);
 				index_stack.set_visible_child_name("indexnumber");
+	       		}else if (activity == Transmission.Activity.CHECK_WAIT || activity ==  Transmission.Activity.CHECK){
+				index_stack.set_visible(true);
+				index_stack.set_visible_child_name("check");
 	       		}else{
 				index_stack.set_visible(false);
 	       		}

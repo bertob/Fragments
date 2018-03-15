@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.3 -->
+<!-- Generated with glade 3.22.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <template class="FragmentsTorrent" parent="GtkListBoxRow">
@@ -48,6 +48,17 @@
                       <packing>
                         <property name="name">indexnumber</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">content-loading-symbolic</property>
+                      </object>
+                      <packing>
+                        <property name="name">check</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
@@ -184,19 +195,17 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="pause_button">
+                          <object class="GtkButton" id="action_button">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <signal name="clicked" handler="pause_button_clicked" swapped="no"/>
                             <child>
-                              <object class="GtkBox">
+                              <object class="GtkStack">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">center</property>
-                                <property name="valign">center</property>
-                                <property name="orientation">vertical</property>
+                                <property name="transition_type">crossfade</property>
                                 <child>
                                   <object class="GtkImage" id="pause_image">
                                     <property name="visible">True</property>
@@ -205,9 +214,7 @@
                                     <property name="icon_name">media-playback-pause-symbolic</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
+                                    <property name="name">stop</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -217,9 +224,20 @@
                                     <property name="icon_name">media-playback-start-symbolic</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
+                                    <property name="name">start</property>
                                     <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkImage" id="remove_image">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="no_show_all">True</property>
+                                    <property name="icon_name">list-remove-symbolic</property>
+                                  </object>
+                                  <packing>
+                                    <property name="name">remove</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
