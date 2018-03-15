@@ -76,10 +76,10 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 	// Other
 	[GtkChild] private Image mime_type_image;
         [GtkChild] private Image turboboost_image;
-        [GtkChild] private Image pause_image;
-        [GtkChild] private Image start_image;
         [GtkChild] private Revealer revealer;
+        [GtkChild] private Stack action_stack;
 	[GtkChild] private Button open_button;
+	[GtkChild] private Button remove_button;
 	[GtkChild] public EventBox eventbox;
 	[GtkChild] public Stack index_stack;
 	[GtkChild] public Label index_label;
@@ -105,23 +105,40 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
 	private void connect_signals(){
         	this.notify["activity"].connect(() => {
-			start_image.set_visible(false);
-			pause_image.set_visible(true);
+			action_stack.set_visible_child_name("stop");
 
-			if(activity == Transmission.Activity.STOPPED){
-				start_image.set_visible(true);
-				pause_image.set_visible(false);
-				index_stack.set_visible(true);
-				index_stack.set_visible_child_name("stopped");
-	       		}else if (activity == Transmission.Activity.DOWNLOAD_WAIT){
-				index_stack.set_visible(true);
-				index_stack.set_visible_child_name("indexnumber");
-	       		}else if (activity == Transmission.Activity.CHECK_WAIT || activity ==  Transmission.Activity.CHECK){
-				index_stack.set_visible(true);
-				index_stack.set_visible_child_name("check");
-	       		}else{
-				index_stack.set_visible(false);
-	       		}
+        		switch(activity){
+        			case Transmission.Activity.STOPPED: {
+        				action_stack.set_visible_child_name("start");
+					index_stack.set_visible(true);
+					index_stack.set_visible_child_name("stopped");
+        				break;
+        			}
+        			case Transmission.Activity.DOWNLOAD_WAIT: {
+        				index_stack.set_visible(true);
+					index_stack.set_visible_child_name("indexnumber");
+        				break;
+        			}
+        			case Transmission.Activity.CHECK: {
+        				index_stack.set_visible(true);
+					index_stack.set_visible_child_name("check");
+        				break;
+        			}
+        			case Transmission.Activity.CHECK_WAIT: {
+        				index_stack.set_visible(true);
+					index_stack.set_visible_child_name("check");
+        				break;
+        			}
+        			case Transmission.Activity.SEED: {
+        				action_stack.set_visible_child_name("remove");
+        				break;
+        			}
+        			case Transmission.Activity.SEED_WAIT: {
+        				action_stack.set_visible_child_name("remove");
+        				break;
+        			}
+        			default: index_stack.set_visible(false); break;
+        		}
         	});
 
         	eventbox.drag_begin.connect(() => {
@@ -133,6 +150,8 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         		this.set_visible(true);
         		pause_torrent_update = false;
         	});
+
+        	remove_button.clicked.connect(remove_torrent);
 	}
 
         public void toggle_revealer (){
@@ -140,17 +159,18 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         }
 
         [GtkCallback]
-        private void pause_button_clicked(){
-		if(activity == Transmission.Activity.STOPPED)
-			torrent.start();
-		else
-			torrent.stop();
+        private void action_button_clicked(){
+        	switch(activity){
+        		case Transmission.Activity.STOPPED: torrent.start(); break;
+        		case Transmission.Activity.SEED: remove_torrent(); break;
+        		case Transmission.Activity.SEED_WAIT: remove_torrent(); break;
+        		default: torrent.stop(); break;
+        	}
 
 		update_information();
         }
 
-        [GtkCallback]
-        private void remove_button_clicked(){
+        private void remove_torrent(){
         	Gtk.MessageDialog msg = new Gtk.MessageDialog (App.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.NONE, "");
 
 		msg.secondary_text = _("Once removed, continuing the transfer will require the torrent file or magnet link.");

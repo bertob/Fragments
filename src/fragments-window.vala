@@ -72,4 +72,3 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 		filech.close ();
 	}
 }
-
