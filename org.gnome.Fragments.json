@@ -134,7 +134,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/FragmentsApp/Fragments"
+                    "url" : "https://github.com/haecker-felix/Fragments"
                 }
             ]
         }

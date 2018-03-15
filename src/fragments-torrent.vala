@@ -7,6 +7,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
 	// Torrent name
         [GtkChild] private Label name_label;
+        public string name { get; set; }
 
 	// Status
 	public Transmission.Activity activity { get; set; }
@@ -14,28 +15,28 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
 	// ETA
         [GtkChild] private Label eta_label;
-        public uint eta { get{ return torrent.stat_cached.eta; } }
+        public uint eta { get{ return torrent.stat.eta; } }
 
 	// Progress
         [GtkChild] private ProgressBar progress_bar;
-        public double progress { get{ return torrent.stat_cached.percentDone; } }
+        public double progress { get{ return torrent.stat.percentDone; } }
 
 	// Seeders
         [GtkChild] private Label seeders_label;
-        public int seeders_active { get{ return torrent.stat_cached.peersSendingToUs; } }
-        public int seeders { get{ return torrent.stat_cached.peersConnected; } }
+        public int seeders_active { get{ return torrent.stat.peersSendingToUs; } }
+        public int seeders { get{ return torrent.stat.peersConnected; } }
 
         // Leechers
         [GtkChild] private Label leechers_label;
-        public int leechers { get{ return torrent.stat_cached.peersGettingFromUs; } }
+        public int leechers { get{ return torrent.stat.peersGettingFromUs; } }
 
 	// Downloaded bytes
         [GtkChild] private Label downloaded_label;
-        public uint64 downloaded { get{ return torrent.stat_cached.haveValid; } }
+        public uint64 downloaded { get{ return torrent.stat.haveValid; } }
 
 	// Uploaded bytes
         [GtkChild] private Label uploaded_label;
-        public uint64 uploaded { get{ return torrent.stat_cached.uploadedEver; } }
+        public uint64 uploaded { get{ return torrent.stat.uploadedEver; } }
 
 	// Download speed
         [GtkChild] private Label download_speed_label;
@@ -43,7 +44,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         public string download_speed {
         	get{
         		char[40] buf = new char[40];
-        		_download_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceDownloadSpeed_KBps);
+        		_download_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat.pieceDownloadSpeed_KBps);
 			return _download_speed;
         	}
         }
@@ -54,13 +55,13 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         public string upload_speed {
         	get{
         		char[40] buf = new char[40];
-			_upload_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat_cached.pieceUploadSpeed_KBps);
+			_upload_speed = Transmission.String.Units.speed_KBps (buf, torrent.stat.pieceUploadSpeed_KBps);
 			return _upload_speed;
         	}
         }
 
         // Torrent size
-        public uint64 size { get{ return torrent.stat_cached.sizeWhenDone; } }
+        public uint64 size { get{ return torrent.stat.sizeWhenDone; } }
 
 	// Manual update
 	[GtkChild] private Button manual_update_button;
@@ -72,10 +73,6 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         // Don't update torrent information. Useful for dnd.
 	public bool pause_torrent_update = false;
 
-	// Show Gtk.ListBox index number.
-	public bool show_index_number { get; set; }
-	[GtkChild] public Label index_label;
-
 	// Other
 	[GtkChild] private Image mime_type_image;
         [GtkChild] private Image turboboost_image;
@@ -85,18 +82,19 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 	[GtkChild] private Button open_button;
 	[GtkChild] public EventBox eventbox;
 	[GtkChild] public Stack index_stack;
+	[GtkChild] public Label index_label;
 
         public Torrent(Transmission.Torrent torrent){
         	this.torrent = torrent;
-        	show_index_number = false;
+        	name = torrent.name;
+        	name_label.set_text(name);
 
-        	name_label.set_text(torrent.name);
-
-		// set correct mimetype image
         	set_mime_type_image();
 
+		// default activity is STOPPED, so it wouldn't trigger the activity notify for stopped torrents
+		activity = Transmission.Activity.CHECK;
+
 		connect_signals();
-		reset_timeout();
 		update_information();
         }
 
@@ -107,19 +105,20 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 
 	private void connect_signals(){
         	this.notify["activity"].connect(() => {
-        		if(activity == Transmission.Activity.STOPPED){
+			start_image.set_visible(false);
+			pause_image.set_visible(true);
+
+			if(activity == Transmission.Activity.STOPPED){
 				start_image.set_visible(true);
 				pause_image.set_visible(false);
+				index_stack.set_visible(true);
 				index_stack.set_visible_child_name("stopped");
-        		}else{
-        			start_image.set_visible(false);
-				pause_image.set_visible(true);
+	       		}else if (activity == Transmission.Activity.DOWNLOAD_WAIT){
+				index_stack.set_visible(true);
 				index_stack.set_visible_child_name("indexnumber");
-        		}
-        	});
-
-        	this.notify["show-index-number"].connect(() => {
-        		index_stack.set_visible(show_index_number);
+	       		}else{
+				index_stack.set_visible(false);
+	       		}
         	});
 
         	eventbox.drag_begin.connect(() => {
@@ -211,10 +210,10 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 			mime_type_image.set_from_gicon(ContentType.get_symbolic_icon("text-x-generic"), Gtk.IconSize.MENU);
 	}
 
-	public string generate_activity_text(){
+	private string generate_activity_text(){
 		string st = "";
-                switch(torrent.stat_cached.activity){
-                	case Transmission.Activity.STOPPED: { st = _("Stopped"); break;}
+                switch(torrent.stat.activity){
+                	case Transmission.Activity.STOPPED: { st = _("Paused"); break;}
 			case Transmission.Activity.SEED: { st = _("%s uploaded · %s".printf(format_size(uploaded), upload_speed)); break;}
 			case Transmission.Activity.SEED_WAIT: { st = _("Queued to seed"); break;}
 			case Transmission.Activity.DOWNLOAD: { st = _("%s of %s downloaded · %s").printf(format_size(downloaded), format_size(size), download_speed); break;}
@@ -222,7 +221,6 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 			case Transmission.Activity.CHECK: { st = _("Checking files…"); break;}
 			case Transmission.Activity.CHECK_WAIT: { st = _("Queued to check files"); break;}
 		}
-
 		return st;
 	}
 
@@ -230,10 +228,12 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 		if(torrent == null) return false;
 
 		reset_timeout();
-		if(pause_torrent_update || torrent.stat_cached == null) return false;
+		if(pause_torrent_update || torrent.stat == null) return false;
 
-		this.activity = torrent.stat_cached.activity;
-		notify_property("activity");
+		if(this.activity != torrent.stat.activity){
+			this.activity = torrent.stat.activity;
+			notify_property("activity");
+		}
 
 		status_label.set_text(generate_activity_text());
 

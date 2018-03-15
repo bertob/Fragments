@@ -29,19 +29,19 @@ public class Fragments.SettingsWindow : Gtk.Window {
 		});
 
 		download_folder_button.clicked.connect(() => {
-            Gtk.FileChooserDialog chooser = new Gtk.FileChooserDialog (_("Select download folder"), this, Gtk.FileChooserAction.SELECT_FOLDER);
-            chooser.add_button (_("Cancel"), Gtk.ResponseType.CANCEL);
-	    	chooser.add_button (_("Open"), Gtk.ResponseType.ACCEPT);
-	    	chooser.set_default_response (Gtk.ResponseType.ACCEPT);
-	    	chooser.set_current_folder(App.settings.download_folder);
+			Gtk.FileChooserDialog chooser = new Gtk.FileChooserDialog (_("Select download folder"), this, Gtk.FileChooserAction.SELECT_FOLDER);
+			chooser.add_button (_("Cancel"), Gtk.ResponseType.CANCEL);
+			chooser.add_button (_("Open"), Gtk.ResponseType.ACCEPT);
+			chooser.set_default_response (Gtk.ResponseType.ACCEPT);
+		    	chooser.set_current_folder(App.settings.download_folder);
 
-		    if (chooser.run () == Gtk.ResponseType.ACCEPT) {
-			    App.settings.download_folder = chooser.get_current_folder();
-			    download_folder_label.set_text(chooser.get_current_folder());
-		    }
+			if (chooser.run () == Gtk.ResponseType.ACCEPT) {
+				App.settings.download_folder = chooser.get_current_folder();
+				download_folder_label.set_text(chooser.get_current_folder());
+			}
 
-            chooser.close ();
-            chooser.destroy();
+			chooser.close ();
+			chooser.destroy();
 		});
 	}
 }

@@ -5,9 +5,13 @@ public class Fragments.TorrentManager{
 
         private static string CONFIG_DIR = GLib.Path.build_path(GLib.Path.DIR_SEPARATOR_S, Environment.get_user_config_dir(), "fragments");
 
-	public TorrentModel queued_torrents;
-	public TorrentModel downloading_torrents;
-	public TorrentModel seeding_torrents;
+	public GLib.ListStore stopped_torrents;
+	public GLib.ListStore check_wait_torrents;
+	public GLib.ListStore check_torrents;
+	public GLib.ListStore download_wait_torrents;
+	public GLib.ListStore download_torrents;
+	public GLib.ListStore seed_torrents;
+	public GLib.ListStore seed_wait_torrents;
 
         public TorrentManager(){
 		Transmission.String.Units.mem_init(1024, _("KB"), _("MB"), _("GB"), _("TB"));
@@ -19,9 +23,13 @@ public class Fragments.TorrentManager{
                 session = new Transmission.Session(CONFIG_DIR, false, settings);
                 if(App.settings.download_folder == "") App.settings.download_folder = Environment.get_user_special_dir(GLib.UserDirectory.DOWNLOAD);
 
-		queued_torrents = new TorrentModel();
-		downloading_torrents = new TorrentModel();
-		seeding_torrents = new TorrentModel();
+		stopped_torrents = new GLib.ListStore(typeof (Torrent));
+		check_wait_torrents = new GLib.ListStore(typeof (Torrent));
+		check_torrents = new GLib.ListStore(typeof (Torrent));
+		download_wait_torrents = new GLib.ListStore(typeof (Torrent));
+		download_torrents = new GLib.ListStore(typeof (Torrent));
+		seed_torrents = new GLib.ListStore(typeof (Torrent));
+		seed_wait_torrents = new GLib.ListStore(typeof (Torrent));
 
 		update_transmission_settings();
 		connect_signals();
@@ -79,31 +87,25 @@ public class Fragments.TorrentManager{
 			ftorrent.notify["activity"].connect(() => { update_torrent(ftorrent); });
 			update_torrent(ftorrent);
 		}
-		message("Result: %s", result.to_string());
 	}
 
 	private void update_torrent(Torrent torrent){
-		if(torrent.activity == Transmission.Activity.SEED || torrent.activity == Transmission.Activity.SEED_WAIT){
-			if(seeding_torrents.contains_torrent(torrent)) return;
-			else{
-				if(downloading_torrents.contains_torrent(torrent)) downloading_torrents.remove_torrent(torrent);
-				if(queued_torrents.contains_torrent(torrent)) queued_torrents.remove_torrent(torrent);
-				seeding_torrents.add_torrent(torrent);
-			}
-		}else if(torrent.activity == Transmission.Activity.DOWNLOAD){
-			if(downloading_torrents.contains_torrent(torrent)) return;
-			else{
-				if(seeding_torrents.contains_torrent(torrent)) seeding_torrents.remove_torrent(torrent);
-				if(queued_torrents.contains_torrent(torrent)) queued_torrents.remove_torrent(torrent);
-				downloading_torrents.add_torrent(torrent);
-			}
-		}else{
-			if(queued_torrents.contains_torrent(torrent)) return;
-			else{
-				if(seeding_torrents.contains_torrent(torrent)) seeding_torrents.remove_torrent(torrent);
-				if(downloading_torrents.contains_torrent(torrent)) downloading_torrents.remove_torrent(torrent);
-				queued_torrents.add_torrent(torrent);
-			}
+		Utils.remove_torrent_from_liststore(stopped_torrents, torrent);
+		Utils.remove_torrent_from_liststore(check_wait_torrents, torrent);
+		Utils.remove_torrent_from_liststore(check_torrents, torrent);
+		Utils.remove_torrent_from_liststore(download_wait_torrents, torrent);
+		Utils.remove_torrent_from_liststore(download_torrents, torrent);
+		Utils.remove_torrent_from_liststore(seed_wait_torrents, torrent);
+		Utils.remove_torrent_from_liststore(seed_torrents, torrent);
+
+		switch(torrent.activity){
+			case Transmission.Activity.STOPPED: stopped_torrents.append(torrent); break;
+			case Transmission.Activity.CHECK_WAIT: check_wait_torrents.append(torrent); break;
+			case Transmission.Activity.CHECK: check_torrents.append(torrent); break;
+			case Transmission.Activity.DOWNLOAD_WAIT: download_wait_torrents.append(torrent); break;
+			case Transmission.Activity.DOWNLOAD: download_torrents.append(torrent); break;
+			case Transmission.Activity.SEED_WAIT: seed_wait_torrents.append(torrent); break;
+			case Transmission.Activity.SEED: seed_torrents.append(torrent); break;
 		}
 	}
 }

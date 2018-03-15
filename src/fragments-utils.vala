@@ -16,5 +16,11 @@ public class Fragments.Utils{
                 if (minutes > 0) return "%s".printf (str_minutes);
                 if (seconds > 0) return str_seconds;
                 return "";
-    }
+	}
+
+	public static void remove_torrent_from_liststore(ListStore store, Torrent torrent){
+		for(int i = 0; i < store.get_n_items(); i++){
+			if(store.get_object(i) == torrent) store.remove(i);
+		}
+	}
 }

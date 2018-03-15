@@ -86,44 +86,42 @@ class Fragments.TorrentListBox : ListBox {
 		selection_data.set (Gdk.Atom.intern_static_string ("GTK_LIST_BOX_ROW"), 32, data);
 	}
 
+	private void row_drag_end () {
+		if (hover_row != null) {
+			hover_row.get_style_context ().remove_class ("drag-hover-top");
+			hover_row.get_style_context ().remove_class ("drag-hover-bottom");
+		}
+	}
+
 	public override void drag_data_received (Gdk.DragContext context, int x, int y, SelectionData selection_data, uint info, uint time_) {
 		Widget handle;
 		ListBoxRow row;
 
 		int index = 0;
 		if (hover_row != null) {
-			if (top) {
-				index = hover_row.get_index ();
-				if(index == -1) index = 0;
-				hover_row.get_style_context ().remove_class ("drag-hover-top");
-			} else {
-				index = hover_row.get_index ();
-				hover_row.get_style_context ().remove_class ("drag-hover-bottom");
-			}
+			index = hover_row.get_index ();
+			if(index == -1) index = 0;
+			hover_row.get_style_context ().remove_class ("drag-hover-top");
+			hover_row.get_style_context ().remove_class ("drag-hover-bottom");
+
 			handle = ((Widget[])selection_data.get_data ())[0];
 			row = (ListBoxRow) handle.get_ancestor (typeof (ListBoxRow));
 
 			if (row != hover_row) {
-				row.get_parent ().remove (row);
-				insert (row, index);
+			 	this.remove (row);
+			 	this.insert (row, index);
 				update_index_number();
 			}
 		}
 		drag_row = null;
 	}
 
-	private void update_index_number(){
-		this.@foreach ((torrent) => {
-			((Torrent)torrent).index_label.set_text((((Torrent)torrent).get_index()+1).to_string());
-		});
-	}
-
-	public void add_torrent (Torrent row, int pos) {
+	public void insert_torrent (Torrent row, int pos) {
 		if(rearrangeable){
 			drag_source_set (row.eventbox, Gdk.ModifierType.BUTTON1_MASK, entries, Gdk.DragAction.MOVE);
 			row.eventbox.drag_begin.connect (row_drag_begin);
 			row.eventbox.drag_data_get.connect (row_drag_data_get);
-			row.show_index_number = true;
+			row.eventbox.drag_end.connect(row_drag_end);
 		}
 
 		this.insert(row, pos);
@@ -135,10 +133,15 @@ class Fragments.TorrentListBox : ListBox {
 			drag_source_unset (row.eventbox);
 			row.eventbox.drag_begin.disconnect (row_drag_begin);
 			row.eventbox.drag_data_get.disconnect (row_drag_data_get);
-			row.show_index_number = false;
 		}
 
 		this.remove(row);
 		update_index_number();
+	}
+
+	private void update_index_number(){
+		this.@foreach ((torrent) => {
+			((Torrent)torrent).index_label.set_text((((Torrent)torrent).get_index()+1).to_string());
+		});
 	}
 }
