@@ -107,6 +107,7 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 	private void connect_signals(){
         	this.notify["activity"].connect(() => {
 			action_stack.set_visible_child_name("stop");
+			index_stack.set_visible(false);
 
         		switch(activity){
         			case Transmission.Activity.STOPPED: {
@@ -138,7 +139,6 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
         				action_stack.set_visible_child_name("remove");
         				break;
         			}
-        			default: index_stack.set_visible(false); break;
         		}
         	});
 
