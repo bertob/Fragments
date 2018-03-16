@@ -109,6 +109,11 @@ public class Fragments.TorrentManager{
 		Utils.remove_torrent_from_liststore(seed_wait_torrents, torrent);
 		Utils.remove_torrent_from_liststore(seed_torrents, torrent);
 
+		if(torrent.removed == true){
+			torrent.destroy();
+			return;
+		}
+
 		switch(torrent.activity){
 			case Transmission.Activity.STOPPED: stopped_torrents.append(torrent); break;
 			case Transmission.Activity.CHECK_WAIT: check_wait_torrents.append(torrent); break;

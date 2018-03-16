@@ -4,6 +4,7 @@ using Gtk;
 public class Fragments.Torrent : Gtk.ListBoxRow{
 
 	private unowned Transmission.Torrent torrent;
+	public bool removed = false;
 
 	// Torrent name
         [GtkChild] private Label name_label;
@@ -188,7 +189,8 @@ public class Fragments.Torrent : Gtk.ListBoxRow{
 			if(response_id == 1){
 				torrent.remove(checkbutton.active, null);
 				torrent = null;
-				this.hide();
+				removed = true;
+				notify_property("activity");
 			}
 			msg.destroy();
 		});
