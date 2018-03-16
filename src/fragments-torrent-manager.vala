@@ -47,6 +47,7 @@ public class Fragments.TorrentManager{
 
 	public void save_session_settings(){
 		message("Save session settings...");
+		update_transmission_settings();
 		session.save_settings(CONFIG_DIR, settings);
 	}
 
