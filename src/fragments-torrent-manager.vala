@@ -55,24 +55,20 @@ public class Fragments.TorrentManager{
 		}
         }
 
-	public bool add_torrent_by_path(string path){
+	public void add_torrent_by_path(string path){
 		message("Adding torrent by file \"%s\"...", path);
 
 		var torrent_constructor = new Transmission.TorrentConstructor (session);
 		torrent_constructor.set_metainfo_from_file (path);
 		add_torrent(ref torrent_constructor);
-
-		return false;
 	}
 
-	public bool add_torrent_by_magnet(string magnet){
+	public void add_torrent_by_magnet(string magnet){
 		message("Adding torrent by magnet link \"%s\"...", magnet);
 
 		var torrent_constructor = new Transmission.TorrentConstructor (session);
 		torrent_constructor.set_metainfo_from_magnet_link (magnet);
 		add_torrent(ref torrent_constructor);
-
-		return false;
 	}
 
 	private void add_torrent(ref Transmission.TorrentConstructor torrent_constructor){
@@ -86,6 +82,8 @@ public class Fragments.TorrentManager{
 			var ftorrent = new Fragments.Torrent(torrent);
 			ftorrent.notify["activity"].connect(() => { update_torrent(ftorrent); });
 			update_torrent(ftorrent);
+		}else{
+			warning("Could not add torrent: " + result.to_string());
 		}
 	}
 

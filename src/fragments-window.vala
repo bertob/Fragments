@@ -38,6 +38,7 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 
 	private void connect_signals(){
 		App.settings.notify["enable-dark-theme"].connect(update_gtk_theme);
+		this.focus_in_event.connect(check_for_magnet_link);
 	}
 
 	private void update_gtk_theme(){
@@ -70,5 +71,18 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 		}
 
 		filech.close ();
+	}
+
+	private bool check_for_magnet_link(){
+		message("Check for magnet link in clipboard...");
+		Gdk.Display display = this.get_display ();
+		Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+
+		string text = clipboard.wait_for_text ();
+		message("Current clipboard: " + text);
+
+		manager.add_torrent_by_magnet(text);
+
+		return false;
 	}
 }
