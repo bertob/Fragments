@@ -6,6 +6,10 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 	private TorrentManager manager;
 	[GtkChild] private Gtk.Box torrent_group_box;
 
+	[GtkChild] private Stack notification_stack;
+	[GtkChild] private Label magnet_notification_label;
+	[GtkChild] private Revealer notification_revealer;
+
 	public Window (App app, ref TorrentManager manager) {
 		GLib.Object(application: app);
 
@@ -75,14 +79,32 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 
 	private bool check_for_magnet_link(){
 		message("Check for magnet link in clipboard...");
-		Gdk.Display display = this.get_display ();
-		Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+		string torrent_name = manager.get_magnet_name(Utils.get_clipboard_text(this));
 
-		string text = clipboard.wait_for_text ();
-		message("Current clipboard: " + text);
-
-		manager.add_torrent_by_magnet(text);
+		if(torrent_name != ""){
+			message("Detected torrent: " + torrent_name);
+			show_magnet_notification(torrent_name);
+		}
 
 		return false;
+	}
+
+	private void show_magnet_notification(string torrent_name){
+		notification_stack.set_visible_child_name("add-magnet");
+		magnet_notification_label.set_markup(_("Add magnet link <b>\"%s\"</b> from clipboard?").printf(torrent_name));
+		notification_revealer.set_reveal_child(true);
+	}
+
+	[GtkCallback]
+	private void add_magnet_button_clicked(){
+		manager.add_torrent_by_magnet(Utils.get_clipboard_text(this));
+		Utils.clear_clipboard(this);
+		notification_revealer.set_reveal_child(false);
+	}
+
+	[GtkCallback]
+	private void close_magnet_notification_button_clicked(){
+		Utils.clear_clipboard(this);
+		notification_revealer.set_reveal_child(false);
 	}
 }

@@ -71,6 +71,19 @@ public class Fragments.TorrentManager{
 		add_torrent(ref torrent_constructor);
 	}
 
+	public string get_magnet_name(string magnet){
+		var torrent_constructor = new Transmission.TorrentConstructor (null);
+		torrent_constructor.set_metainfo_from_magnet_link (magnet);
+
+		string torrent_name = "";
+
+		Transmission.info info;
+		Transmission.ParseResult result = torrent_constructor.parse (out info);
+
+		if (result == Transmission.ParseResult.OK) torrent_name = info.name;
+		return torrent_name;
+	}
+
 	private void add_torrent(ref Transmission.TorrentConstructor torrent_constructor){
 		torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, App.settings.download_folder);
 

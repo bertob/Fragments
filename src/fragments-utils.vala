@@ -23,4 +23,17 @@ public class Fragments.Utils{
 			if(store.get_object(i) == torrent) store.remove(i);
 		}
 	}
+
+	public static string get_clipboard_text(Window window){
+		Gdk.Display display = window.get_display ();
+		Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+
+		return clipboard.wait_for_text ();
+	}
+
+	public static void clear_clipboard(Window window){
+		Gdk.Display display = window.get_display ();
+		Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+		clipboard.set_text("", 0);
+	}
 }
