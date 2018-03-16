@@ -45,6 +45,11 @@ public class Fragments.TorrentManager{
 
         }
 
+	public void save_session_settings(){
+		message("Save session settings...");
+		session.save_settings(CONFIG_DIR, settings);
+	}
+
         public void restore_torrents(){
 		var torrent_constructor = new Transmission.TorrentConstructor (session);
 		unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
