@@ -81,7 +81,7 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 		message("Check for magnet link in clipboard...");
 		string torrent_name = manager.get_magnet_name(Utils.get_clipboard_text(this));
 
-		if(torrent_name != ""){
+		if(torrent_name != null && torrent_name != ""){
 			message("Detected torrent: " + torrent_name);
 			show_magnet_notification(torrent_name);
 		}
