@@ -40,16 +40,12 @@ public class Fragments.TorrentManager{
         }
 
         private void update_transmission_settings(){
+        	message("Save session settings...");
                 settings.add_int (Transmission.Prefs.download_queue_size, App.settings.max_downloads);
 		session.update_settings (settings);
+		session.save_settings(CONFIG_DIR, settings);
 
         }
-
-	public void save_session_settings(){
-		message("Save session settings...");
-		update_transmission_settings();
-		session.save_settings(CONFIG_DIR, settings);
-	}
 
         public void restore_torrents(){
 		var torrent_constructor = new Transmission.TorrentConstructor (session);
