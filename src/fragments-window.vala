@@ -45,11 +45,6 @@ public class Fragments.Window : Gtk.ApplicationWindow {
 		this.focus_in_event.connect(check_for_magnet_link);
 	}
 
-	protected override bool delete_event(Gdk.EventAny event){
-		manager.close_session();
-		return false;
-	}
-
 	private void update_gtk_theme(){
 		var gtk_settings = Gtk.Settings.get_default ();
 		gtk_settings.gtk_application_prefer_dark_theme = App.settings.enable_dark_theme;
