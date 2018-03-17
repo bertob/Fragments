@@ -35,6 +35,12 @@ public class Fragments.TorrentManager{
 		connect_signals();
         }
 
+        public void close_session(){
+        	message("Close transmission session...");
+        	update_transmission_settings();
+		session = null;
+        }
+
         private void connect_signals(){
 		App.settings.notify["max-downloads"].connect(update_transmission_settings);
         }
@@ -125,5 +131,6 @@ public class Fragments.TorrentManager{
 			case Transmission.Activity.SEED_WAIT: seed_wait_torrents.append(torrent); break;
 			case Transmission.Activity.SEED: seed_torrents.append(torrent); break;
 		}
+		update_transmission_settings();
 	}
 }
