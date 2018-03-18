@@ -12,3 +12,14 @@ You can try out the latest nightly build.
 **GPG Details:**
 * Fingerprint:  F97F 162A F540 FF52 B0D2 8C92 D703 6FBE A001 AC1A
 * ID: D7036FBEA001AC1A
+
+## Build introductions
+```
+git clone --recurse-submodules https://github.com/haecker-felix/Fragments
+cd Fragments
+mkdir build
+cd build
+meson ..
+ninja
+sudo ninja install
+```
