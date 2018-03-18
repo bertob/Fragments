@@ -1,0 +1,16 @@
+b64_lib = meson.get_compiler('c').find_library('b64', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'third-party', 'b64', 'lib'))
+utp_lib = meson.get_compiler('c').find_library('utp', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'third-party', 'utp', 'lib'))
+miniupnpc_lib = meson.get_compiler('c').find_library('miniupnpc', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'third-party', 'miniupnpc', 'lib'))
+dht_lib = meson.get_compiler('c').find_library('dht', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'third-party', 'dht', 'lib'))
+natpmp_lib = meson.get_compiler('c').find_library('natpmp', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'third-party', 'natpmp', 'lib'))
+event_lib = meson.get_compiler('c').find_library('event', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'third-party', 'event', 'lib'))
+
+curl_lib = meson.get_compiler('c').find_library('libcurl')
+crypto_lib = meson.get_compiler('c').find_library('libcrypto')
+pthread_lib = meson.get_compiler('c').find_library('libpthread', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'libtransmission'))
+zlib_lib = meson.get_compiler('c').find_library('libz', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'libtransmission'))
+
+transmission_include = include_directories('transmission/')
+transmission_lib = meson.get_compiler('c').find_library('libtransmission', dirs: join_paths (meson.source_root (), 'submodules', 'libtransmission', 'libtransmission'))
+transmission_vapi = meson.get_compiler('vala').find_library('transmission', dirs: vapi_dir)
+transmission_dep = declare_dependency(include_directories: [transmission_include], dependencies: [pthread_lib, b64_lib, utp_lib, miniupnpc_lib, dht_lib, natpmp_lib, curl_lib, crypto_lib, event_lib, zlib_lib, transmission_vapi, transmission_lib])

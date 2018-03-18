@@ -2,3 +2,4 @@
 org.gnome.Fragments.json~
 _build
 *.ui~
+submodules/libtransmission
